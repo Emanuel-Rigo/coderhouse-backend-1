@@ -6,11 +6,6 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
-const users = [
-    {id: 1, firstName: "Juan"},
-    {id: 2, firstName: "Pedro"}
-
-]
 
 const storeProducts = [
     {
@@ -224,13 +219,9 @@ const storeProducts = [
       ]
     }
   ];
-  
 
-
+const carts = []
   
-// app.get('/api/users', (req, res)=> {
-//     res.status(200).send({error: null, data: users})
-// })
 
 
 app.get('/api/products', (req, res) => {
@@ -271,38 +262,28 @@ app.post('/api/products', (req, res) => {
 });
 
 
+app.put('/api/products/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const index = storeProducts.findIndex(element => element.id === id);
+
+  if (index !== -1) {
+      let updatedProduct = { ...storeProducts[index], ...req.body };
+      storeProducts[index] = updatedProduct;
+      res.status(200).send({ error: null, data: updatedProduct });
+  } else {
+      res.status(404).send({ error: 'No se encuentra el producto', data: [] });
+  }
+});
 
 
-// app.post('/api/products', (req, res)=> {
-//         if (req.body.hasOwnProperty('firstName')) {
-//             const newUser = {id: users.length + 1, title: req.body.title}
-//             users.push(newUser)
-//             res.status(200).send({error: null, data: `${req.body.firstName}`});
-//         } else {res.status(400).send({error: 'Faltan campos', data: []})}
-//     })
 
-
-app.put('/api/users/:id', (req,res)=> {
+app.delete('/api/products/:id', (req,res)=> {
     const id = parseInt(req.params.id)
-    const index = users.findIndex(element => element.id === id)
-    if (index > 1) {
-        let updatedUser = users[index];
-        updatedUser.firstName = req.body.firstName
-        users[index] = updatedUser
-        res.status(200).send({error: null, data: updatedUser})
-    } else {res.status(404).send({error: 'no se encuentra el usuario', data: []})
-
-    }
-})
-
-
-app.delete('/api/users/:id', (req,res)=> {
-    const id = parseInt(req.params.id)
-    const index = users.findIndex(element => element.id === id)
-    if (index > 1) {
-        users.splice(index, 1)
-        res.status(200).send({error: null, data: 'usuario borrado'})
-    } else {res.status(404).send({error: 'no se encuentra el usuario', data: []})
+    const index = storeProducts.findIndex(element => element.id === id)
+    if (index !== -1) {
+        storeProducts.splice(index, 1)
+        res.status(200).send({error: null, data: 'producto borrado'})
+    } else {res.status(404).send({error: 'no se encuentra el producto', data: []})
 
     }
 })
