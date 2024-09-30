@@ -219,10 +219,7 @@ const storeProducts = [
       ]
     }
   ];
-
-const carts = []
   
-
 
 app.get('/api/products', (req, res) => {
     const limit = parseInt(req.query.limit) || storeProducts.length;
@@ -261,7 +258,6 @@ app.post('/api/products', (req, res) => {
     res.status(200).send({ error: null, data: newProduct });
 });
 
-
 app.put('/api/products/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = storeProducts.findIndex(element => element.id === id);
@@ -275,8 +271,6 @@ app.put('/api/products/:id', (req, res) => {
   }
 });
 
-
-
 app.delete('/api/products/:id', (req,res)=> {
     const id = parseInt(req.params.id)
     const index = storeProducts.findIndex(element => element.id === id)
@@ -287,6 +281,36 @@ app.delete('/api/products/:id', (req,res)=> {
 
     }
 })
+
+
+
+// ////////////////CART
+
+const carts = [
+  {id: 1,
+    products: [{id:1, quantity: 2}]
+  }
+  ]
+
+  app.get('/api/carts/:cid', (req, res) => {
+    const cartID = parseInt(req.params.cid); 
+    const cart = carts.find(element => element.id === cartID);
+    if (!cart) {
+        return res.status(404).send({ error: "Cart not found", data: null });
+    }
+    res.status(200).send({ error: null, data: cart });
+});
+
+app.post('/api/carts', (req, res)=> {
+ const newCart = {id: carts.length + 1,product: []}
+  carts.push(newCart)
+
+ res.status(201).send({error: null, data: newCart})
+})
+
+
+
+
 
 
 app.listen(PORT, ()=> {
