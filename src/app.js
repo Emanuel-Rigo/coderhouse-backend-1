@@ -11,18 +11,34 @@ app.use(express.urlencoded({extended: true}))
 //////////////////// PRPDUCTS //////////////////////
 
 let storeProducts = [];
+let storeCarts = []
 
 async function fetchJSON(filePath) {
   try {
     const data = await fs.promises.readFile(filePath, 'utf-8');
     storeProducts = JSON.parse(data);
-    console.log(storeProducts);
+ console.log(storeProducts)
   } catch (error) {
     console.error('Error reading JSON file:', error);
   }
 }
 
 fetchJSON('./src/products.json');
+
+
+async function fetchJSON2(filePath) {
+  try {
+    const data = await fs.promises.readFile(filePath, 'utf-8');
+    storeCarts = JSON.parse(data);
+ console.log(storeCarts)
+  } catch (error) {
+    console.error('Error reading JSON file:', error);
+  }
+}
+
+fetchJSON2('./src/carts.json')
+
+
 
 
   
@@ -64,24 +80,27 @@ app.post('/api/products',async (req, res) => {
     res.status(200).send({ error: null, data: newProduct });
 });
 
-app.put('/api/products/:id', (req, res) => {
+app.put('/api/products/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const index = storeProducts.findIndex(element => element.id === id);
 
   if (index !== -1) {
       let updatedProduct = { ...storeProducts[index], ...req.body };
       storeProducts[index] = updatedProduct;
+      await fs.promises.writeFile('./src/products.json', JSON.stringify(storeProducts));
       res.status(200).send({ error: null, data: updatedProduct });
   } else {
       res.status(404).send({ error: 'No se encuentra el producto', data: [] });
   }
 });
 
-app.delete('/api/products/:id', (req,res)=> {
+app.delete('/api/products/:id', async (req,res)=> {
     const id = parseInt(req.params.id)
     const index = storeProducts.findIndex(element => element.id === id)
     if (index !== -1) {
         storeProducts.splice(index, 1)
+    await fs.promises.writeFile('./src/products.json', JSON.stringify(storeProducts));
+        
         res.status(200).send({error: null, data: 'producto borrado'})
     } else {res.status(404).send({error: 'no se encuentra el producto', data: []})
 
@@ -90,17 +109,11 @@ app.delete('/api/products/:id', (req,res)=> {
 
 
 
-////////////////// CART //////////////////
-
-const carts = [
-  {id: 1,
-    products: [{id:1, quantity: 2}]
-  }
-  ]
+////////////////// CARTs //////////////////
 
 app.get('/api/carts/:cid', (req, res) => {
     const cartID = parseInt(req.params.cid); 
-    const cart = carts.find(element => element.id === cartID);
+    const cart = storeCarts.find(element => element.id === cartID);
     if (!cart) {
         return res.status(404).send({ error: "Cart not found", data: null });
     }
@@ -108,18 +121,16 @@ app.get('/api/carts/:cid', (req, res) => {
     res.status(200).send({ data: cart.products });
 });
 
-app.post('/api/carts', (req, res)=> {
+app.post('/api/carts', async(req, res)=> {
  const newCart = {id: nanoid(10),products: []}
-  carts.push(newCart)
-
+  storeCarts.push(newCart)
+  await fs.promises.writeFile('./src/carts.json', JSON.stringify(storeCarts));
  res.status(201).send({error: null, data: newCart})
 })
 
-
-
-app.post('/:cid/product/:pid', (req, res) => {
+app.post('/:cid/product/:pid', async (req, res) => {
   const { cid, pid } = req.params;
-  const cart = carts.find(c => c.id === cid);
+  const cart = storeCarts.find(c => c.id === cid);
   if (!cart) {
     return res.status(404).send({ error: 'Carrito no encontrado' });
   }
@@ -129,12 +140,9 @@ app.post('/:cid/product/:pid', (req, res) => {
   } else {
     cart.products.push({ product: pid, quantity: 1 });
   }
+  await fs.promises.writeFile('./src/carts.json', JSON.stringify(storeCarts));
   res.status(200).send({ error: null, data: cart });
 });
-
-
-
-
 
 app.listen(PORT, ()=> {
     console.log(`Server activo en puerto ${PORT}`)
