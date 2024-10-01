@@ -39,8 +39,6 @@ async function fetchJSON2(filePath) {
 fetchJSON2('./src/carts.json')
 
 
-
-
   
 app.get('/api/products', (req, res) => {
     const limit = parseInt(req.query.limit) || storeProducts.length;
@@ -77,6 +75,7 @@ app.post('/api/products',async (req, res) => {
     };
     storeProducts.push(newProduct);
     await fs.promises.writeFile('./src/products.json', JSON.stringify(storeProducts));
+    fetchJSON('./src/products.json');
     res.status(200).send({ error: null, data: newProduct });
 });
 
@@ -88,6 +87,7 @@ app.put('/api/products/:id', async (req, res) => {
       let updatedProduct = { ...storeProducts[index], ...req.body };
       storeProducts[index] = updatedProduct;
       await fs.promises.writeFile('./src/products.json', JSON.stringify(storeProducts));
+      fetchJSON('./src/products.json');
       res.status(200).send({ error: null, data: updatedProduct });
   } else {
       res.status(404).send({ error: 'No se encuentra el producto', data: [] });
@@ -125,14 +125,39 @@ app.post('/api/carts', async(req, res)=> {
  const newCart = {id: nanoid(10),products: []}
   storeCarts.push(newCart)
   await fs.promises.writeFile('./src/carts.json', JSON.stringify(storeCarts));
+fetchJSON2('./src/carts.json')
+
  res.status(201).send({error: null, data: newCart})
 })
 
-app.post('/:cid/product/:pid', async (req, res) => {
+// app.post('/:cid/product/:pid', async (req, res) => {
+//   const { cid, pid } = req.params;
+//   const cart = storeCarts.find(c => c.id === cid);
+//   if (!cart) {
+//     return res.status(404).send({ error: 'Carrito no encontrado' });
+//   }
+//   const productInCart = cart.products.find(p => p.product === pid);
+//   if (productInCart) {
+//     productInCart.quantity += 1;
+//   } else {
+//     cart.products.push({ product: pid, quantity: 1 });
+//   }
+//   await fs.promises.writeFile('./src/carts.json', JSON.stringify(storeCarts));
+// fetchJSON2('./src/carts.json')
+
+//   res.status(200).send({ error: null, data: cart });
+// });
+
+
+app.post('/api/carts/:cid/products/:pid', async (req, res) => {
   const { cid, pid } = req.params;
-  const cart = storeCarts.find(c => c.id === cid);
+  const cart = storeCarts.find(c => c.id == cid);
   if (!cart) {
     return res.status(404).send({ error: 'Carrito no encontrado' });
+  }
+  const productExists = storeProducts.some(p => p.id == pid);
+  if (!productExists) {
+    return res.status(404).send({ error: 'Producto no encontrado' });
   }
   const productInCart = cart.products.find(p => p.product === pid);
   if (productInCart) {
@@ -140,10 +165,14 @@ app.post('/:cid/product/:pid', async (req, res) => {
   } else {
     cart.products.push({ product: pid, quantity: 1 });
   }
-  await fs.promises.writeFile('./src/carts.json', JSON.stringify(storeCarts));
+  await fs.promises.writeFile('./src/carts.json', JSON.stringify(storeCarts, null, 2));
+  fetchJSON2('./src/carts.json');
+
   res.status(200).send({ error: null, data: cart });
 });
 
+
+/////// LISTEN
 app.listen(PORT, ()=> {
     console.log(`Server activo en puerto ${PORT}`)
 })
