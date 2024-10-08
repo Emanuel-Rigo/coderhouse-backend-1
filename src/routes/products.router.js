@@ -5,6 +5,12 @@ import fs from 'fs';
 const router = Router();
 let storeProducts = [];
 
+const midd1 = (req, res, next) => {
+        console.log('se recibio una solicitud GET')
+    next()
+}
+
+
 async function fetchProducts(filePath) {
     try {
         const data = await fs.promises.readFile(filePath, 'utf-8');
@@ -17,7 +23,7 @@ async function fetchProducts(filePath) {
 fetchProducts('./src/products.json');
 
 
-router.get('/', (req, res) => {
+router.get('/',midd1, (req, res) => {
     const limit = parseInt(req.query.limit) || storeProducts.length;
     const limitedProducts = storeProducts.slice(0, limit);
     res.status(200).send({ error: null, data: limitedProducts });

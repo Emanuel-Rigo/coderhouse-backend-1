@@ -1,9 +1,15 @@
 import express from "express";
-import productsRouter from './routes/products.js';
-import cartsRouter from './routes/carts.js';
+import productsRouter from './routes/products.router.js';
+import cartsRouter from './routes/carts.router.js';
 
-const PORT = 8080;
+import config from "./config.js";
+
 const app = express();
+
+const midd = (req, res, next) => {
+    console.log('se recibio una solicitud')
+    next()
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -11,6 +17,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 
-app.listen(PORT, () => {
-    console.log(`Server activo en puerto ${PORT}`);
+app.use('/static', express.static(`${config.DIRNAME}/public`))
+
+
+app.listen(config.PORT, () => {
+    console.log(`Server activo en puerto ${config.PORT}`);
 });

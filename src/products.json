@@ -1,19 +1,5 @@
 [
   {
-    "id": 2,
-    "title": "Smartphone",
-    "description": "Latest model smartphone with powerful features.",
-    "code": "SP2002",
-    "price": 800,
-    "status": true,
-    "stock": 15,
-    "category": "Electronics",
-    "thumbnails": [
-      "/images/smartphone1.jpg",
-      "/images/smartphone2.jpg"
-    ]
-  },
-  {
     "id": 3,
     "title": "Headphones",
     "description": "Noise-cancelling headphones with superior sound.",
@@ -290,5 +276,19 @@
     "stock": 2,
     "category": "Furniture",
     "thumbnails": []
+  },
+  {
+    "id": "UG9PS_aGOz",
+    "title": "Gaming Chair2",
+    "description": "Ergonomic gaming chair for long hours of play.",
+    "code": "GC4004",
+    "price": 305,
+    "status": true,
+    "stock": 5,
+    "category": "Furniture",
+    "thumbnails": [
+      "/images/gamingchair1.jpg",
+      "/images/gamingchair2.jpg"
+    ]
   }
 ]
