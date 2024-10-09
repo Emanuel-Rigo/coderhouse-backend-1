@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.0",
+    "express-handlebars": "^8.0.1",
     "nanoid": "^5.0.7"
   }
 }
