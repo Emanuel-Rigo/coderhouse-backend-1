@@ -13,6 +13,7 @@
   "dependencies": {
     "express": "^4.21.0",
     "express-handlebars": "^8.0.1",
-    "nanoid": "^5.0.7"
+    "nanoid": "^5.0.7",
+    "socket.io": "^4.8.0"
   }
 }

@@ -1,0 +1,30 @@
+<div>
+    <h1>coderhouse chat</h1>
+    <h2>ejemplo del chat</h2>
+
+</div>
+
+
+{{!-- esta ruta solo es valida al servir la plantilla con handlebars --}}
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    // creamos instancia de socket
+    const socketClient = io();
+
+//const socketClient = io('http://serverremoto.com:8080',
+//{
+//    reconnection: true,
+//        reconnectionAttempts: 10,
+//        reconnectionDelay: 1000,
+//        timeout: 5000,
+//        transports: ['websocket']
+//    }
+//  );  
+
+socketClient.emit('init_message', 'hola desde cliente');
+socketClient.on('welcome', (data) => {
+    console.log(data);
+});
+
+</script>

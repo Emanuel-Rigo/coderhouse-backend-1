@@ -13,4 +13,11 @@ router.get('/', (req, res) => {
     res.status(200).render('index', data)
 })
 
+router.get('/chat', (req, res) => {
+    const data = {
+    }
+    
+    res.status(200).render('chat', data)
+})
+
 export default router;
