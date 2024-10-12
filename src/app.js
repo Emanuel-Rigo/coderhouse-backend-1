@@ -35,10 +35,25 @@ const httpServer = app.listen(config.PORT, () => {
 });
 
 const socketServer = new Server(httpServer);
+const messages = []
+
 socketServer.on('connection', (socket) => {
     console.log(`nuevo cliente conectado ${socket.id}`);
     // socket.on('init_message', (data) => {
     //     console.log(data);
     // });
+
+    socket.on('new_user_data', data => {
+        socket.emit('current_messages', messages)
+        socket.broadcast.emit('new_user',data)
+    })
+
     socket.emit('welcome', 'Bienvenido al chat');
+
+    socket.on('new_own_msg', data => {
+        messages.push(data)
+        console.log(data)
+        console.log(messages)
+        socketServer.emit('new_general_msg', data)
+    })
 });

@@ -1,16 +1,45 @@
+<link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.14.1/dist/sweetalert2.min.css">
+
 <div>
     <h1>coderhouse chat</h1>
     <h2>ejemplo del chat</h2>
-
 </div>
 
 
+<div>
+    <p id="msgList"></p>
+    <input  id="msg" name="msg" type="text"></input>
+</div>
+
 {{!-- esta ruta solo es valida al servir la plantilla con handlebars --}}
 <script src="/socket.io/socket.io.js"></script>
+{{!-- <script src="http://cdn.socket.io/4.7.5/socket.io.min.js" ></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.1/dist/sweetalert2.all.min.js"></script>
 
-<script>
+<script type="module">
     // creamos instancia de socket
-    const socketClient = io();
+    const url = '';
+    const options = {};
+    const user = {nickName: ''}
+
+    const msg = document.getElementById('msg')
+    const msgList = document.getElementById('msgList')
+
+
+///////////
+const askName = async () => {
+    const result = await Swal.fire({
+        title: 'Coder chat',
+        input: 'text',
+        text: 'Bienvenido!, indica tu nombre',
+        inputValidator: val => !val && 'Indicar nombre!',
+        allowOutsideClick: false
+    })
+    user.nickName = result.value || 'guest'
+    console.log('Nombre asignado:', user.nickName) // Añadir este log
+}
+
+const socketClient = io(url, options);
 
 //const socketClient = io('http://serverremoto.com:8080',
 //{
@@ -23,8 +52,50 @@
 //  );  
 
 socketClient.emit('init_message', 'hola desde cliente');
-socketClient.on('welcome', (data) => {
-    console.log(data);
+
+socketClient.on('connect', async () => {
+    
+   console.log(`conectando servidor socket.io${url}`)
+
+   await askName()
+   console.log('Usuario después de askName:', user) // Añadir este log
+   socketClient.emit('new_user_data',{
+    user: user.nickName
+   })
 });
+
+socketClient.on('current_messages', data => {
+    msgList.innerHTML = ''
+    data.forEach(msg=> {
+        msgList.innerHTML += `<br/><strong>[${msg.user}</strong>] ${msg.msg}`
+    })
+})
+
+socketClient.on('new_general_msg', data => {
+    msgList.innerHTML += `<br/><strong>[${data.user}</strong>] ${data.msg}`
+})
+
+const notify = (text) => {
+    Swal.fire({text: text,
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+    })
+}
+
+socketClient.on('new_user', data => {
+    notify(`${data.user} se ha encontrado!`)
+})
+
+
+msg.addEventListener('keyup', event => {
+    if (event.key === 'Enter' && msg.value !== '') {
+        const data = {user: user.nickName, msg: msg.value}
+        socketClient.emit('new_own_msg', data)
+        console.log(data)
+        msg.value = ''
+    }
+})
 
 </script>
