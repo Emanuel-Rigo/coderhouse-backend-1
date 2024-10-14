@@ -15,7 +15,16 @@
     async function fetchProducts() {
         try {
             const response = await fetch('/api/products');
-            data = await response.json();
+            const result = await response.json();
+            console.log('Datos recibidos:', result);
+            if (Array.isArray(result)) {
+                data = result;
+            } else if (result.data && Array.isArray(result.data)) {
+                data = result.data;
+            } else {
+                console.error('Los datos recibidos no son un array:', result);
+                data = [];
+            }
         } catch (error) {
             console.error('Error al obtener productos:', error);
         }
@@ -25,7 +34,7 @@
     const options = {};
     const user = {nickName: ''};
 
-    const msg = document.getElementById('ulList');
+    const ulList = document.getElementById('ulList');
 
     const socketClient = io(url, options);
 
@@ -35,19 +44,36 @@
         console.log(`Conectando al servidor socket.io ${url}`);
 
         await fetchProducts();
-        console.log(data);
+        console.log('Datos procesados:', data);
+        updateProductList(data);
 
         socketClient.emit('products_data', data);
     });
 
     // Función para actualizar la lista de productos en el DOM
     function updateProductList(products) {
-        const ulList = document.getElementById('ulList');
+        console.log('Tipo de products:', typeof products);
+        console.log('Contenido de products:', products);
+        
         ulList.innerHTML = '';
+        
+        if (!Array.isArray(products)) {
+            console.error('updateProductList recibió datos no válidos:', products);
+            ulList.innerHTML = '<li>Error: No se pudieron cargar los productos</li>';
+            return;
+        }
+        
+        if (products.length === 0) {
+            ulList.innerHTML = '<li>No hay productos disponibles</li>';
+            return;
+        }
+        
         products.forEach(product => {
-            const li = document.createElement('li');
-            li.textContent = `${product.title} - $${product.price}`;
-            ulList.appendChild(li);
+            if (product && typeof product === 'object') {
+                ulList.innerHTML += `<li><strong>${product.title || 'Sin título'}</strong> - $${product.price || 'Sin precio'}</li>`;
+            } else {
+                console.error('Producto no válido:', product);
+            }
         });
     }
 
