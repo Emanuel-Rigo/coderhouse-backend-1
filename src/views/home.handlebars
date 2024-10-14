@@ -1,0 +1,24 @@
+<div>
+    <h1>Inicio</h1>
+</div>
+
+<div>
+    <h2>Lista de Productos</h2>
+    {{log products}} <!-- Esto mostrará los productos en la consola del servidor -->
+    {{#if products.length}}
+        <ul>
+            {{#each products}}
+                <li>
+                    <strong>{{this.title}}</strong>
+                    <p>Precio: ${{this.price}}</p>
+                    <p>Descripción: {{this.description}}</p>
+                    <p>Categoría: {{this.category}}</p>
+                    <p>Stock: {{this.stock}}</p>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>No hay productos disponibles en este momento.</p>
+    {{/if}}
+</div>
+

@@ -1,0 +1,59 @@
+<div>
+    <h1>Inicio</h1>
+</div>
+
+<div>
+    <h2>Lista de Productos</h2>
+    <ul id="ulList"></ul>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    let data = [];
+    
+    async function fetchProducts() {
+        try {
+            const response = await fetch('/api/products');
+            data = await response.json();
+        } catch (error) {
+            console.error('Error al obtener productos:', error);
+        }
+    }
+   
+    const url = '';
+    const options = {};
+    const user = {nickName: ''};
+
+    const msg = document.getElementById('ulList');
+
+    const socketClient = io(url, options);
+
+    socketClient.emit('init_message', 'desde realTimeProducts');
+
+    socketClient.on('connect', async () => {
+        console.log(`Conectando al servidor socket.io ${url}`);
+
+        await fetchProducts();
+        console.log(data);
+
+        socketClient.emit('products_data', data);
+    });
+
+    // Función para actualizar la lista de productos en el DOM
+    function updateProductList(products) {
+        const ulList = document.getElementById('ulList');
+        ulList.innerHTML = '';
+        products.forEach(product => {
+            const li = document.createElement('li');
+            li.textContent = `${product.title} - $${product.price}`;
+            ulList.appendChild(li);
+        });
+    }
+
+    // Escuchar actualizaciones de productos del servidor
+    socketClient.on('update_products', (updatedProducts) => {
+        data = updatedProducts;
+        updateProductList(data);
+    });
+</script>
