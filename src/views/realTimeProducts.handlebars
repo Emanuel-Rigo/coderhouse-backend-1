@@ -7,16 +7,58 @@
     <ul id="ulList"></ul>
 </div>
 
+<div>
+    <h2>Agregar Nuevo Producto</h2>
+    <form id="productForm">
+        <div>
+            <label for="title">Título:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div>
+            <label for="description">Descripción:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div>
+            <label for="code">Código:</label>
+            <input type="text" id="code" name="code" required>
+        </div>
+        <div>
+            <label for="price">Precio:</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+        </div>
+        <div>
+            <label for="status">Estado:</label>
+            <select id="status" name="status">
+                <option value="true">Activo</option>
+                <option value="false">Inactivo</option>
+            </select>
+        </div>
+        <div>
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock" required>
+        </div>
+        <div>
+            <label for="category">Categoría:</label>
+            <input type="text" id="category" name="category" required>
+        </div>
+        <div>
+            <label for="thumbnails">Imágenes (URLs separadas por comas):</label>
+            <input type="text" id="thumbnails" name="thumbnails">
+        </div>
+        <button type="submit">Agregar Producto</button>
+    </form>
+</div>
+
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
     let data = [];
+    const ulList = document.getElementById('ulList');
     
     async function fetchProducts() {
         try {
             const response = await fetch('/api/products');
             const result = await response.json();
-            console.log('Datos recibidos:', result);
             if (Array.isArray(result)) {
                 data = result;
             } else if (result.data && Array.isArray(result.data)) {
@@ -30,40 +72,18 @@
         }
     }
    
-    const url = '';
-    const options = {};
-    const user = {nickName: ''};
-
-    const ulList = document.getElementById('ulList');
-
-    const socketClient = io(url, options);
-
-    socketClient.emit('init_message', 'desde realTimeProducts');
+    const socketClient = io();
 
     socketClient.on('connect', async () => {
-        console.log(`Conectando al servidor socket.io ${url}`);
-
+        console.log('Conectando al servidor socket.io');
         await fetchProducts();
-        console.log('Datos procesados:', data);
         updateProductList(data);
-
-        socketClient.emit('products_data', data);
     });
 
-    // Función para actualizar la lista de productos en el DOM
     function updateProductList(products) {
-        console.log('Tipo de products:', typeof products);
-        console.log('Contenido de products:', products);
-        
         ulList.innerHTML = '';
         
-        if (!Array.isArray(products)) {
-            console.error('updateProductList recibió datos no válidos:', products);
-            ulList.innerHTML = '<li>Error: No se pudieron cargar los productos</li>';
-            return;
-        }
-        
-        if (products.length === 0) {
+        if (!Array.isArray(products) || products.length === 0) {
             ulList.innerHTML = '<li>No hay productos disponibles</li>';
             return;
         }
@@ -71,15 +91,62 @@
         products.forEach(product => {
             if (product && typeof product === 'object') {
                 ulList.innerHTML += `<li><strong>${product.title || 'Sin título'}</strong> - $${product.price || 'Sin precio'}</li>`;
-            } else {
-                console.error('Producto no válido:', product);
             }
         });
     }
 
-    // Escuchar actualizaciones de productos del servidor
+    function addProductToList(product) {
+        if (product && typeof product === 'object') {
+            ulList.innerHTML += `<li><strong>${product.title || 'Sin título'}</strong> - $${product.price || 'Sin precio'}</li>`;
+        }
+    }
+
     socketClient.on('update_products', (updatedProducts) => {
         data = updatedProducts;
         updateProductList(data);
+    });
+
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const productData = Object.fromEntries(formData.entries());
+        
+        productData.status = productData.status === 'true';
+        productData.price = parseFloat(productData.price);
+        productData.stock = parseInt(productData.stock);
+        productData.thumbnails = productData.thumbnails ? productData.thumbnails.split(',').map(url => url.trim()) : [];
+
+        try {
+            const response = await fetch('/api/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(productData),
+            });
+
+            if (response.ok) {
+                const newProduct = await response.json();
+                console.log('Producto agregado:', newProduct);
+                // No actualizamos la lista aquí, esperamos el evento del socket
+                socketClient.emit('new_product', newProduct);
+                e.target.reset();
+            } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.error || 'No se pudo agregar el producto'}`);
+            }
+        } catch (error) {
+            console.error('Error al enviar el formulario:', error);
+            alert('Error al enviar el formulario');
+        }
+    });
+
+    socketClient.on('new_product_general', newProductData => {
+        console.log('Nuevo producto recibido:', newProductData);
+        if (newProductData && newProductData.data) {
+            data.push(newProductData.data);
+            addProductToList(newProductData.data);
+        }
     });
 </script>
