@@ -1,52 +1,56 @@
-<div>
-    <h1>Inicio</h1>
-</div>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-8">Inicio</h1>
 
-<div>
-    <h2>Lista de Productos</h2>
-    <ul id="ulList"></ul>
-</div>
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Lista de Productos</h2>
+        <ul id="ulList" class="bg-white shadow-md rounded-lg divide-y divide-gray-200"></ul>
+    </div>
 
-<div>
-    <h2>Agregar Nuevo Producto</h2>
-    <form id="productForm">
-        <div>
-            <label for="title">Título:</label>
-            <input type="text" id="title" name="title" required>
-        </div>
-        <div>
-            <label for="description">Descripción:</label>
-            <textarea id="description" name="description" required></textarea>
-        </div>
-        <div>
-            <label for="code">Código:</label>
-            <input type="text" id="code" name="code" required>
-        </div>
-        <div>
-            <label for="price">Precio:</label>
-            <input type="number" id="price" name="price" step="0.01" required>
-        </div>
-        <div>
-            <label for="status">Estado:</label>
-            <select id="status" name="status">
-                <option value="true">Activo</option>
-                <option value="false">Inactivo</option>
-            </select>
-        </div>
-        <div>
-            <label for="stock">Stock:</label>
-            <input type="number" id="stock" name="stock" required>
-        </div>
-        <div>
-            <label for="category">Categoría:</label>
-            <input type="text" id="category" name="category" required>
-        </div>
-        <div>
-            <label for="thumbnails">Imágenes (URLs separadas por comas):</label>
-            <input type="text" id="thumbnails" name="thumbnails">
-        </div>
-        <button type="submit">Agregar Producto</button>
-    </form>
+    <div>
+        <h2 class="text-2xl font-semibold mb-4">Agregar Nuevo Producto</h2>
+        <form id="productForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Título:</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="title" name="title" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">Descripción:</label>
+                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" name="description" required></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="code">Código:</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="code" name="code" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="price">Precio:</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" id="price" name="price" step="0.01" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="status">Estado:</label>
+                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="status" name="status">
+                    <option value="true">Activo</option>
+                    <option value="false">Inactivo</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="stock">Stock:</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" id="stock" name="stock" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="category">Categoría:</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="category" name="category" required>
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="thumbnails">Imágenes (URLs separadas por comas):</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="thumbnails" name="thumbnails">
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Agregar Producto
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -98,9 +102,13 @@
     function addProductToList(product) {
         if (product && typeof product === 'object') {
             const li = document.createElement('li');
+            li.className = 'px-6 py-4 flex justify-between items-center';
             li.innerHTML = `
-                <strong>${product.title || 'Sin título'}</strong> - $${product.price || 'Sin precio'}
-                <button class="delete-btn" data-id="${product.id}">Eliminar</button>
+                <div>
+                    <strong class="text-lg">${product.title || 'Sin título'}</strong>
+                    <p class="text-gray-600">$${product.price || 'Sin precio'}</p>
+                    <button class="delete-btn" data-id="${product.id}">Eliminar</button>
+                </div>
             `;
             li.querySelector('.delete-btn').addEventListener('click', () => deleteProduct(product.id));
             ulList.appendChild(li);

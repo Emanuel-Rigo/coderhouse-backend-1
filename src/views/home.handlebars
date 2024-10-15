@@ -1,24 +1,23 @@
-<div>
-    <h1>Inicio</h1>
-</div>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Inicio</h1>
 
-<div>
-    <h2>Lista de Productos</h2>
-    {{log products}} <!-- Esto mostrará los productos en la consola del servidor -->
-    {{#if products.length}}
-        <ul>
-            {{#each products}}
-                <li>
-                    <strong>{{this.title}}</strong>
-                    <p>Precio: ${{this.price}}</p>
-                    <p>Descripción: {{this.description}}</p>
-                    <p>Categoría: {{this.category}}</p>
-                    <p>Stock: {{this.stock}}</p>
-                </li>
-            {{/each}}
-        </ul>
-    {{else}}
-        <p>No hay productos disponibles en este momento.</p>
-    {{/if}}
+    <div>
+        <h2 class="text-2xl font-semibold mb-4">Lista de Productos</h2>
+        {{log products}} <!-- Esto mostrará los productos en la consola del servidor -->
+        {{#if products.length}}
+            <ul class="bg-white shadow-md rounded-lg divide-y divide-gray-200">
+                {{#each products}}
+                    <li class="p-6">
+                        <h3 class="text-xl font-bold mb-2">{{this.title}}</h3>
+                        <p class="text-gray-600 mb-2">Precio: <span class="font-semibold">${{this.price}}</span></p>
+                        <p class="text-gray-700 mb-2">Descripción: {{this.description}}</p>
+                        <p class="text-gray-600 mb-1">Categoría: <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">{{this.category}}</span></p>
+                        <p class="text-gray-600">Stock: <span class="font-semibold">{{this.stock}}</span></p>
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <p class="text-gray-600 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4">No hay productos disponibles en este momento.</p>
+        {{/if}}
+    </div>
 </div>
-

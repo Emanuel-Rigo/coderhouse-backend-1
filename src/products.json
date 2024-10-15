@@ -201,36 +201,14 @@
     "thumbnails": []
   },
   {
-    "id": "v6MES2VcKg",
-    "title": "Sofa2",
-    "description": "moderno",
-    "code": "255",
-    "price": 800,
+    "id": "7XAl-qMpLy",
+    "title": "raton234545",
+    "description": "rtdfgdfgdfg",
+    "code": "345",
+    "price": 34,
     "status": true,
-    "stock": 2,
-    "category": "Furniture",
-    "thumbnails": []
-  },
-  {
-    "id": "CtHGwqpEiJ",
-    "title": "Smartphone",
-    "description": "Latest model smartphone with powerful features.",
-    "code": "SP2002",
-    "price": 800,
-    "status": true,
-    "stock": 15,
-    "category": "Electronics",
-    "thumbnails": []
-  },
-  {
-    "id": "Rxt0juvQ3V",
-    "title": "Smartphone",
-    "description": "Latest model smartphone with powerful features.",
-    "code": "SP2002",
-    "price": 800,
-    "status": true,
-    "stock": 15,
-    "category": "Electronics",
+    "stock": 34,
+    "category": "234",
     "thumbnails": []
   }
 ]
