@@ -90,14 +90,39 @@
         
         products.forEach(product => {
             if (product && typeof product === 'object') {
-                ulList.innerHTML += `<li><strong>${product.title || 'Sin título'}</strong> - $${product.price || 'Sin precio'}</li>`;
+                addProductToList(product);
             }
         });
     }
 
     function addProductToList(product) {
         if (product && typeof product === 'object') {
-            ulList.innerHTML += `<li><strong>${product.title || 'Sin título'}</strong> - $${product.price || 'Sin precio'}</li>`;
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <strong>${product.title || 'Sin título'}</strong> - $${product.price || 'Sin precio'}
+                <button class="delete-btn" data-id="${product.id}">Eliminar</button>
+            `;
+            li.querySelector('.delete-btn').addEventListener('click', () => deleteProduct(product.id));
+            ulList.appendChild(li);
+        }
+    }
+
+    async function deleteProduct(productId) {
+        try {
+            const response = await fetch(`/api/products/${productId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                console.log('Producto eliminado:', productId);
+                socketClient.emit('delete_product', productId);
+            } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.error || 'No se pudo eliminar el producto'}`);
+            }
+        } catch (error) {
+            console.error('Error al eliminar el producto:', error);
+            alert('Error al eliminar el producto');
         }
     }
 
@@ -129,7 +154,6 @@
             if (response.ok) {
                 const newProduct = await response.json();
                 console.log('Producto agregado:', newProduct);
-                // No actualizamos la lista aquí, esperamos el evento del socket
                 socketClient.emit('new_product', newProduct);
                 e.target.reset();
             } else {
@@ -145,8 +169,13 @@
     socketClient.on('new_product_general', newProductData => {
         console.log('Nuevo producto recibido:', newProductData);
         if (newProductData && newProductData.data) {
-            data.push(newProductData.data);
-            addProductToList(newProductData.data);
+            updateProductList(newProductData.data);
         }
+    });
+
+    socketClient.on('eliminado_ok', (deletedProductId) => {
+        console.log('Producto eliminado:', deletedProductId);
+        data = data.filter(product => product.id !== deletedProductId);
+        updateProductList(data);
     });
 </script>
