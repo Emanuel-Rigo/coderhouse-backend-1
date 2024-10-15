@@ -166,49 +166,5 @@
       "/images/runningshoes1.jpg",
       "/images/runningshoes2.jpg"
     ]
-  },
-  {
-    "id": "Q_Psh7v4ZO",
-    "title": "Sofa2",
-    "description": "moderno",
-    "code": "255",
-    "price": 800,
-    "status": true,
-    "stock": 2,
-    "category": "Furniture",
-    "thumbnails": []
-  },
-  {
-    "id": "SBHpZner0A",
-    "title": "Sofa2",
-    "description": "moderno",
-    "code": "255",
-    "price": 800,
-    "status": true,
-    "stock": 2,
-    "category": "Furniture",
-    "thumbnails": []
-  },
-  {
-    "id": "VP5lYzqmm2",
-    "title": "Sofa2",
-    "description": "moderno",
-    "code": "255",
-    "price": 800,
-    "status": true,
-    "stock": 2,
-    "category": "Furniture",
-    "thumbnails": []
-  },
-  {
-    "id": "7XAl-qMpLy",
-    "title": "raton234545",
-    "description": "rtdfgdfgdfg",
-    "code": "345",
-    "price": 34,
-    "status": true,
-    "stock": 34,
-    "category": "234",
-    "thumbnails": []
   }
 ]

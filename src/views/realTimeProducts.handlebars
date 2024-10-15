@@ -71,6 +71,7 @@
                 console.error('Los datos recibidos no son un array:', result);
                 data = [];
             }
+            updateProductList(data);
         } catch (error) {
             console.error('Error al obtener productos:', error);
         }
@@ -81,14 +82,13 @@
     socketClient.on('connect', async () => {
         console.log('Conectando al servidor socket.io');
         await fetchProducts();
-        updateProductList(data);
     });
 
     function updateProductList(products) {
         ulList.innerHTML = '';
         
         if (!Array.isArray(products) || products.length === 0) {
-            ulList.innerHTML = '<li>No hay productos disponibles</li>';
+            ulList.innerHTML = '<li class="px-6 py-4 text-gray-500">No hay productos disponibles</li>';
             return;
         }
         
@@ -102,13 +102,13 @@
     function addProductToList(product) {
         if (product && typeof product === 'object') {
             const li = document.createElement('li');
-            li.className = 'px-6 py-4 flex justify-between items-center';
+            li.className = 'px-6 py-4 flex justify-between items-center border-b border-gray-200';
             li.innerHTML = `
                 <div>
                     <strong class="text-lg">${product.title || 'Sin título'}</strong>
                     <p class="text-gray-600">$${product.price || 'Sin precio'}</p>
-                    <button class="delete-btn" data-id="${product.id}">Eliminar</button>
                 </div>
+                <button class="delete-btn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" data-id="${product.id}">Eliminar</button>
             `;
             li.querySelector('.delete-btn').addEventListener('click', () => deleteProduct(product.id));
             ulList.appendChild(li);
@@ -164,6 +164,7 @@
                 console.log('Producto agregado:', newProduct);
                 socketClient.emit('new_product', newProduct);
                 e.target.reset();
+                await fetchProducts(); // Actualizar la lista después de agregar
             } else {
                 const errorData = await response.json();
                 alert(`Error: ${errorData.error || 'No se pudo agregar el producto'}`);
@@ -174,16 +175,13 @@
         }
     });
 
-    socketClient.on('new_product_general', newProductData => {
+    socketClient.on('new_product_general', async (newProductData) => {
         console.log('Nuevo producto recibido:', newProductData);
-        if (newProductData && newProductData.data) {
-            updateProductList(newProductData.data);
-        }
+        await fetchProducts(); // Actualizar la lista cuando se recibe un nuevo producto
     });
 
-    socketClient.on('eliminado_ok', (deletedProductId) => {
+    socketClient.on('eliminado_ok', async (deletedProductId) => {
         console.log('Producto eliminado:', deletedProductId);
-        data = data.filter(product => product.id !== deletedProductId);
-        updateProductList(data);
+        await fetchProducts(); // Actualizar la lista después de eliminar
     });
 </script>
