@@ -138,33 +138,5 @@
       "/images/yogamat1.jpg",
       "/images/yogamat2.jpg"
     ]
-  },
-  {
-    "id": 13,
-    "title": "Smartwatch",
-    "description": "Fitness-focused smartwatch with heart rate monitor.",
-    "code": "SW1313",
-    "price": 200,
-    "status": true,
-    "stock": 10,
-    "category": "Accessories",
-    "thumbnails": [
-      "/images/smartwatch1.jpg",
-      "/images/smartwatch2.jpg"
-    ]
-  },
-  {
-    "id": 14,
-    "title": "Running Shoes",
-    "description": "Lightweight and comfortable running shoes.",
-    "code": "RS1414",
-    "price": 100,
-    "status": true,
-    "stock": 22,
-    "category": "Sports",
-    "thumbnails": [
-      "/images/runningshoes1.jpg",
-      "/images/runningshoes2.jpg"
-    ]
   }
 ]

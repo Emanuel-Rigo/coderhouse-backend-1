@@ -32,7 +32,6 @@ const httpServer = app.listen(config.PORT, () => {
 });
 
 const socketServer = new Server(httpServer);
-const messages = []
 
 socketServer.on('connection', (socket) => {
 
