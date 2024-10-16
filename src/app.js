@@ -35,26 +35,6 @@ const socketServer = new Server(httpServer);
 const messages = []
 
 socketServer.on('connection', (socket) => {
-    socket.on('new_user_data', data => {
-        socket.emit('current_messages', messages)
-        socket.broadcast.emit('new_user',data)
-    })
-
-
-    socket.on('new_own_msg', data => {
-        messages.push(data)
-        socketServer.emit('new_general_msg', data)
-    })
-
-    socket.on('new_product', data => {
-        console.log("llego")
-        socketServer.emit('new_product_general', data)
-    })
-
-    socket.on('delete_product', data => {
-        console.log(data, "eliminado")
-        socketServer.emit('eliminado_ok', data)
-    })
 
     socket.on('update_ok', data=> {
         console.log("update")
