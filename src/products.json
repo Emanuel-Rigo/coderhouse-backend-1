@@ -138,5 +138,16 @@
       "/images/yogamat1.jpg",
       "/images/yogamat2.jpg"
     ]
+  },
+  {
+    "id": "Ezwtih9oVL",
+    "title": "silla",
+    "description": "silla comoda roja",
+    "code": "345",
+    "price": 45,
+    "status": true,
+    "stock": 4,
+    "category": "muebles",
+    "thumbnails": []
   }
 ]
