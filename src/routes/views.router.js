@@ -27,4 +27,5 @@ router.get('/', async (req, res) => {
 router.get('/realTimeProducts', (req,res)=> {
     res.status(200).render('realTimeProducts')
 })
+
 export default router;

@@ -2,9 +2,14 @@ import { Router } from "express";
 import { nanoid } from "nanoid";
 import fs from "fs";
 
+import ProductController from "../dao/product.controller.js";
+
 import productModel from "../dao/models/product.model.js";
 
 const router = Router();
+const controller = new ProductController()
+
+
 let storeProducts = [];
 
 const midd1 = (req, res, next) => {
@@ -12,24 +17,25 @@ const midd1 = (req, res, next) => {
   next();
 };
 
-async function fetchProducts(filePath) {
-  try {
-    const data = await fs.promises.readFile(filePath, "utf-8");
-    storeProducts = JSON.parse(data);
-  } catch (error) {
-    console.error("Error reading JSON file:", error);
-  }
-}
-
-fetchProducts("./src/products.json");
-
 router.get("/", midd1, async (req, res) => {
-  const data = await productModel.find().lean();
-  // CAMBIAMOS STOREDPRODUCTS POR DATA
+  const data = await controller.get()
+
   const limit = parseInt(req.query.limit) || data.length;
   const limitedProducts = data.slice(0, limit);
   res.status(200).send({ error: null, data: limitedProducts });
 });
+
+// async function fetchProducts(filePath) {
+//   try {
+//     const data = await fs.promises.readFile(filePath, "utf-8");
+//     storeProducts = JSON.parse(data);
+//   } catch (error) {
+//     console.error("Error reading JSON file:", error);
+//   }
+// }
+
+// fetchProducts("./src/products.json");
+
 
 router.get("/:pid", async (req, res) => {
   const productId = req.params.pid;
@@ -86,7 +92,7 @@ router.post("/", async (req, res) => {
   //     JSON.stringify(storeProducts, null, 2)
   //   );
 
-  const process = await productModel.create(newProduct);
+  const process = await controller.add(newProduct)
 
   res.status(200).send({ error: null, data: process });
 });
@@ -97,7 +103,7 @@ router.put("/:id", async (req, res) => {
   const updated = req.body;
   const options = { new: true };
 
-  const process = await productModel.findOneAndUpdate(filter, updated, options);
+  const process = await controller.update(filter, updated, options)
 
   //   const index = storeProducts.findIndex((element) => element.id == id);
 
@@ -130,19 +136,20 @@ router.put("/:id", async (req, res) => {
 //   }
 // });
 
-router.delete("/:pid", async (req, res) => {
-  const productId = req.params.pid; // Obtiene el ID del producto de los parámetros de la ruta
-  const filter = { _id: productId }; // Define el filtro para buscar por ID
+router.delete("/:pid", async (req, res) => { 
+  const productId = req.params.pid; 
+  const filter = { _id: productId }; 
+  const options = {}
 
   try {
-    const product = await productModel.findOneAndDelete(filter); // Busca y elimina el producto
+    const product = await controller.delete(filter, options)
 
     if (!product) {
-      return res.status(404).send({ error: "Product not found", data: null }); // Si no se encuentra el producto
+      return res.status(404).send({ error: "Product not found", data: null }); 
     }
-    res.status(200).send({ error: null, data: product }); // Devuelve el producto eliminado
+    res.status(200).send({ error: null, data: product }); 
   } catch (error) {
-    console.error("Error al borrar el producto:", error); // Manejo de errores
+    console.error("Error al borrar el producto:", error); 
     res.status(500).send({ error: "Error al borrar el producto", data: null });
   }
 });
