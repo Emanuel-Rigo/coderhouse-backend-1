@@ -4,7 +4,7 @@ import fs from "fs";
 
 import ProductController from "../dao/product.controller.js";
 
-import productModel from "../dao/models/product.model.js";
+//import productModel from "../dao/models/product.model.js";
 
 const router = Router();
 const controller = new ProductController()
@@ -152,6 +152,6 @@ router.delete("/:pid", async (req, res) => {
     console.error("Error al borrar el producto:", error); 
     res.status(500).send({ error: "Error al borrar el producto", data: null });
   }
-});
+}); 
 
 export default router;

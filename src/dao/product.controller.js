@@ -28,9 +28,9 @@ class ProductController {
     }
   };
 
-  delete = async (data) => {
+  delete = async (data, options) => {
     try {
-      return await productModel.findOneAndDelete(data); 
+      return await productModel.findOneAndDelete(data, options); 
     } catch (err) {
       return err.message;
     }

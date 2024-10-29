@@ -3,11 +3,15 @@ import { promises as fs } from 'fs'
 
 const router = Router();
 
-async function fetchProducts(filePath) {
+async function fetchProducts(filePath, limit) {
     try {
         const data = await fs.readFile(filePath, 'utf-8');
         const products = JSON.parse(data);
-        return products;
+        if (limit) {
+            return products.slice(0, limit);
+        } else {
+            return products;
+        }
     } catch (error) {
         console.error('Error al leer el archivo JSON:', error);
         return [];
@@ -16,7 +20,7 @@ async function fetchProducts(filePath) {
 
 router.get('/', async (req, res) => {
     try {
-        const products = await fetchProducts('./src/products.json');
+        const products = await fetchProducts('./src/products.json', limit);
         res.render('home', { products: products });
     } catch (error) {
         console.error('Error al obtener productos:', error);
@@ -25,7 +29,15 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/realTimeProducts', (req,res)=> {
-    res.status(200).render('realTimeProducts')
+    const params = req.query; 
+    const limit = params.limit;
+        
+        console.log('Límite:', limit);
+    res.status(200).render('realTimeProducts', {limit})
+})
+
+router.get('/cart', (req, res)=> {
+    res.status(200).render('cart')
 })
 
 export default router;
