@@ -59,10 +59,9 @@
 
   async function fetchProducts() {
     try {
-        console.log({{limit}});
 
-        const response = await fetch({{#if limit}}`/api/products?limit={{limit}}`{{else}}'/api/products'{{/if}});
-
+        const response = await fetch({{#if pg}}`/api/products/paginated/{{pg}}`{{else}}'/api/products'{{/if}});
+console.log({{pg}})
         const result = await response.json();
         if (Array.isArray(result)) {
             data = result;
@@ -101,6 +100,9 @@
           <strong class="text-lg">${product.title || 'Sin título'}</strong>
           <p class="text-gray-600">$${product.price || 'Sin precio'}</p>
         </div>
+        <a href="/views/realTimeProducts/${product._id}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block">
+          Ver Producto
+        </a>
         <button class="delete-btn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" data-id="${product._id}">Eliminar</button>
       `;
       li.querySelector('.delete-btn').addEventListener('click', () => deleteProduct(product._id));

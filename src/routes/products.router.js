@@ -36,11 +36,19 @@ router.get("/", midd1, async (req, res) => {
 
 // fetchProducts("./src/products.json");
 
+router.get("/paginated/:pg?", async (req, res) => {
+  const pg = req.params.pg || 1;
+  const data = await controller.getPaginated(pg)
+  res.status(200).send({ error: null, data});
+});
 
-router.get("/:pid", async (req, res) => {
+
+router.get("/realTimeProducts/:pid?", async (req, res) => {
   const productId = req.params.pid;
+  console.log('products:',productId)
   const filter = { _id: productId };
-  console.log(filter)
+  console.log('filter:', filter)
+  console.log('hola')
 
   try {
     const product = await controller.getOne(filter);
@@ -61,11 +69,7 @@ router.get("/:pid", async (req, res) => {
 //   res.status(200).send({ error: null, data: data });
 // });
 
-router.get("/paginated/:pg?", async (req, res) => {
-  const pg = req.params.pg || 1;
-  const data = await controller.getPaginated(pg)
-  res.status(200).send({ error: null, data});
-});
+
 
 
 router.post("/", async (req, res) => {

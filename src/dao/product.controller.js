@@ -1,8 +1,18 @@
 import productModel from "./models/product.model.js";
 
 
+
+
 class ProductController {
   constructor() {}
+
+  getAll = async () => {
+    try {
+      return await productModel.find().lean();
+    } catch (err) {
+      return err.message;
+    }
+  };
 
   get = async () => {
     try {
@@ -14,7 +24,7 @@ class ProductController {
 
   getOne = async (data) => {
     try {
-      console.log(data);
+      console.log('data:',data);
       return await productModel.findOne(data).lean();
     } catch (err) {
       console.error('Error al buscar el producto:', err);

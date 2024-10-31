@@ -1,0 +1,39 @@
+<div class="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <div class="p-6">
+        <h2 class="text-2xl font-bold text-gray-800">{{product.title}}</h2>
+        <p class="mt-2 text-gray-600">{{product.description}}</p>
+        <div class="mt-4">
+            <span class="text-lg font-semibold text-gray-800">Precio: ${{product.price}}</span>
+        </div>
+        <div class="mt-4">
+            <span class="text-sm text-gray-500">Código: {{product.code}}</span>
+        </div>
+        <div class="mt-4">
+            <span class="text-sm text-gray-500">Categoría: {{product.category}}</span>
+        </div>
+        <div class="mt-4">
+            <span class="text-sm text-gray-500">Estado: {{#if product.status}}Disponible{{else}}No disponible{{/if}}</span>
+        </div>
+        <div class="mt-4">
+            <span class="text-sm text-gray-500">Stock: {{product.stock}}</span>
+        </div>
+        <div class="mt-4">
+            {{#if product.thumbnails.length}}
+                <h3 class="text-lg font-semibold text-gray-800">Imágenes:</h3>
+                <div class="flex space-x-2 mt-2">
+                    {{#each product.thumbnails}}
+                        <img src="{{this}}" alt="Thumbnail" class="w-16 h-16 object-cover rounded">
+                    {{/each}}
+                </div>
+            {{else}}
+                <p class="text-gray-500">No hay imágenes disponibles.</p>
+            {{/if}}
+        </div>
+        <div class="mt-6">
+            <a href="/views/realTimeProducts" class="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                Volver a Productos
+            </a>
+        </div>
+    </div>
+</div>
+
