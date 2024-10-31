@@ -20,9 +20,9 @@ const midd1 = (req, res, next) => {
 router.get("/", midd1, async (req, res) => {
   const data = await controller.get()
 
-  const limit = parseInt(req.query.limit) || data.length;
-  const limitedProducts = data.slice(0, limit);
-  res.status(200).send({ error: null, data: limitedProducts });
+  // const limit = parseInt(req.query.limit) || data.length;
+  // const limitedProducts = data.slice(0, limit);
+  res.status(200).send({ error: null, data});
 });
 
 // async function fetchProducts(filePath) {
@@ -40,9 +40,10 @@ router.get("/", midd1, async (req, res) => {
 router.get("/:pid", async (req, res) => {
   const productId = req.params.pid;
   const filter = { _id: productId };
+  console.log(filter)
 
   try {
-    const product = await productModel.findOne(filter);
+    const product = await controller.getOne(filter);
 
     if (!product) {
       return res.status(404).send({ error: "Product not found", data: null });
@@ -53,6 +54,19 @@ router.get("/:pid", async (req, res) => {
     res.status(500).send({ error: "Error al buscar el producto", data: null });
   }
 });
+
+// router.get('/paginated/:pg?', async (req, res) => {
+//   const pg = req.params.pg || 1;
+//   const data = await controller.getPaginated(pg);
+//   res.status(200).send({ error: null, data: data });
+// });
+
+router.get("/paginated/:pg?", async (req, res) => {
+  const pg = req.params.pg || 1;
+  const data = await controller.getPaginated(pg)
+  res.status(200).send({ error: null, data});
+});
+
 
 router.post("/", async (req, res) => {
   const { title, description, code, price, stock, category, thumbnails } =

@@ -30,10 +30,19 @@ router.get('/', async (req, res) => {
 
 router.get('/realTimeProducts', (req,res)=> {
     const params = req.query; 
-    const limit = params.limit;
+    const paginated = params.limit;
         
-        console.log('Límite:', limit);
+    console.log('Límite:', limit);
     res.status(200).render('realTimeProducts', {limit})
+})
+
+
+router.get('/realTimeProducts/paginated/:pg?', (req,res)=> {
+    const params = req.query; 
+    const paginated = params.pg;
+        
+    console.log('Límite:', limit);
+    res.status(200).render('realTimeProducts', {pg})
 })
 
 router.get('/cart', (req, res)=> {
