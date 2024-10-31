@@ -61,10 +61,13 @@
     try {
 
         const response = await fetch({{#if pg}}`/api/products/paginated/{{pg}}`{{else}}'/api/products'{{/if}});
-console.log({{pg}})
+        console.log({{pg}})
+
         const result = await response.json();
-        if (Array.isArray(result)) {
-            data = result;
+        console.log('result:',result.data.docs)
+        if (Array.isArray(result.data.docs)) {
+            data = result.data.docs;
+            console.log('data:', data)
         } else if (result.data && Array.isArray(result.data)) {
             data = result.data;
         } else {
@@ -146,11 +149,13 @@ console.log({{pg}})
         body: JSON.stringify(productData),
       });
       if (response.ok) {
+        console.log('update ok')
         const newProduct = await response.json();
         e.target.reset();
         let updated = await fetchProducts();
         socketClient.emit('update_ok', updated);
       } else {
+        console.log('update error')
         const errorData = await response.json();
         alert(`Error: ${errorData.error || 'No se pudo agregar el producto'}`);
       }

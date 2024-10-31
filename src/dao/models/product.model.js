@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from 'mongoose-paginate-v2'
 
 //Anulamos comportamiento de renombre por defecto de colleciones
 mongoose.pluralize(null);
@@ -19,6 +20,7 @@ const schema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+schema.plugin(mongoosePaginate)
 
 //generamos modelo
 const productModel = mongoose.model(collection, schema);

@@ -63,14 +63,6 @@ router.get("/realTimeProducts/:pid?", async (req, res) => {
   }
 });
 
-// router.get('/paginated/:pg?', async (req, res) => {
-//   const pg = req.params.pg || 1;
-//   const data = await controller.getPaginated(pg);
-//   res.status(200).send({ error: null, data: data });
-// });
-
-
-
 
 router.post("/", async (req, res) => {
   const { title, description, code, price, stock, category, thumbnails } =

@@ -1,8 +1,5 @@
 import productModel from "./models/product.model.js";
 
-
-
-
 class ProductController {
   constructor() {}
 
@@ -16,7 +13,7 @@ class ProductController {
 
   get = async () => {
     try {
-      return await productModel.find().limit(10).lean();
+      return await productModel.paginate({}, { limit: 10, lean: true });
     } catch (err) {
       return err.message;
     }
@@ -24,17 +21,18 @@ class ProductController {
 
   getOne = async (data) => {
     try {
-      console.log('data:',data);
+      console.log("data:", data);
       return await productModel.findOne(data).lean();
     } catch (err) {
-      console.error('Error al buscar el producto:', err);
+      console.error("Error al buscar el producto:", err);
       return null;
     }
   };
 
-  getPaginated = async (page) => {
+  getPaginated = async (pg) => {
     try {
-      return await productModel.find().skip(page * 10).limit(10).lean();
+      const page = pg || 1;
+      return await productModel.paginate({}, { limit: 10, page: page, lean: true });
     } catch (err) {
       return err.message;
     }
@@ -58,7 +56,7 @@ class ProductController {
 
   delete = async (data, options) => {
     try {
-      return await productModel.findOneAndDelete(data, options); 
+      return await productModel.findOneAndDelete(data, options);
     } catch (err) {
       return err.message;
     }
