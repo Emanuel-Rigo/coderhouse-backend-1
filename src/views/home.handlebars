@@ -1,10 +1,10 @@
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-8">Products</h1>
-    <div>
+    <div class="h-[calc(100vh-330px)]">
         <h2 class="text-2xl font-semibold mb-4">Lista de Productos</h2>
         {{log products}} 
         {{#if products.docs.length}}
-            <ul class="bg-white shadow-md rounded-lg divide-y divide-gray-200">
+            <ul class="bg-white shadow-md rounded-lg divide-y divide-gray-200 h-full overflow-y-auto">
                 {{#each products.docs}}
                     <li class="p-6 flex justify-between items-start">
                         <div class="flex-1">
@@ -27,11 +27,13 @@
             </ul>
 
             <div class="mt-6 flex justify-between">
-                {{#if products.hasPrevPage}}
-                    <a href="/views/products/paginated/{{products.prevPage}}" class="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                        Página Anterior
-                    </a>
-                {{/if}}
+                <div class="flex-grow">
+                    {{#if products.hasPrevPage}}
+                        <a href="/views/products/paginated/{{products.prevPage}}" class="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                            Página Anterior
+                        </a>
+                    {{/if}}
+                </div>
 
                 {{#if products.hasNextPage}}
                     <a href="/views/products/paginated/{{products.nextPage}}" class="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
