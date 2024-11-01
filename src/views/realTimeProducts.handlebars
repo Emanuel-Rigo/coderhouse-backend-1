@@ -1,53 +1,57 @@
-<div class="container mx-auto px-4 py-8"></div>
-  <div class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Lista de Productos</h2>
-    <ul id="ulList" class="bg-white shadow-md rounded-lg divide-y divide-gray-200"></ul>
-  </div>
+<div class="container mx-auto px-4 py-8">
+  <div class="flex h-[calc(100vh-180px)]">
+    <!-- Columna del Formulario -->
+    <div class="w-1/3 pr-4">
+      <h2 class="text-2xl font-semibold mb-4">Agregar Nuevo Producto</h2>
+      <form id="productForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Título:</label>
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="title" name="title" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="description">Descripción:</label>
+          <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" name="description" required></textarea>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="code">Código:</label>
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="code" name="code" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="price">Precio:</label>
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" id="price" name="price" step="0.01" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="status">Estado:</label>
+          <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="status" name="status">
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="stock">Stock:</label>
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" id="stock" name="stock" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="category">Categoría:</label>
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="category" name="category" required />
+        </div>
+        <div class="mb-6">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="thumbnails">Imágenes (URLs separadas por comas):</label>
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="thumbnails" name="thumbnails" />
+        </div>
+        <div class="flex items-center justify-between">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+            Agregar Producto
+          </button>
+        </div>
+      </form>
+    </div>
 
-  <div>
-    <h2 class="text-2xl font-semibold mb-4">Agregar Nuevo Producto</h2>
-    <form id="productForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Título:</label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="title" name="title" required />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="description">Descripción:</label>
-        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" name="description" required></textarea>
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="code">Código:</label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="code" name="code" required />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="price">Precio:</label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" id="price" name="price" step="0.01" required />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="status">Estado:</label>
-        <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="status" name="status">
-          <option value="true">Activo</option>
-          <option value="false">Inactivo</option>
-        </select>
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="stock">Stock:</label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" id="stock" name="stock" required />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="category">Categoría:</label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="category" name="category" required />
-      </div>
-      <div class="mb-6">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="thumbnails">Imágenes (URLs separadas por comas):</label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="thumbnails" name="thumbnails" />
-      </div>
-      <div class="flex items-center justify-between">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-          Agregar Producto
-        </button>
-      </div>
-    </form>
+    <!-- Columna de Productos -->
+    <div class="w-2/3 pl-4 flex flex-col">
+      <h2 class="text-2xl font-semibold mb-4">Lista de Productos</h2>
+      <ul id="ulList" class="bg-white shadow-md rounded-lg divide-y divide-gray-200 flex-1 overflow-y-auto"></ul>
+    </div>
   </div>
 </div>
 
@@ -59,17 +63,12 @@
 
   async function fetchProducts() {
     try {
-
-        const response = await fetch({{#if pg}}`/api/products/paginated/{{pg}}`{{else}}'/api/products'{{/if}});
-        console.log({{pg}})
-
+        const response = await fetch({{#if pg}}`/api/products/paginated/{{pg}}`{{else}}'/api/products/all'{{/if}});
         const result = await response.json();
-        console.log('result:',result.data.docs)
         if (Array.isArray(result.data.docs)) {
-            data = result.data.docs;
-            console.log('data:', data)
+            data = result.data.docs.reverse(); // Invertir el orden de los productos
         } else if (result.data && Array.isArray(result.data)) {
-            data = result.data;
+            data = result.data.reverse(); // Invertir el orden de los productos
         } else {
             console.error('Los datos recibidos no son un array:', result);
             data = [];

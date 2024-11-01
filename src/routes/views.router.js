@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { promises as fs } from 'fs'
+//import { promises as fs } from 'fs'
 
 import ProductController from "../dao/product.controller.js";
 const ProController = new ProductController()
@@ -22,7 +22,7 @@ const router = Router();
 //     }
 // }
 
-router.get('/', async (req, res) => {
+router.get('/products', async (req, res) => {
     try {
         const products = await ProController.get();
         res.render('home', {products});
@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:pid', async (req, res) => {
+router.get('/products/:pid', async (req, res) => {
     const pid = req.params.pid
     try {
         console.log(pid)
@@ -44,10 +44,6 @@ router.get('/:pid', async (req, res) => {
     }
 });
 
-
-
-
-
 router.get('/paginated/:pg',  async(req, res) => {
     const pg = req.params.pg;
     const products = await ProController.getPaginated(pg)
@@ -57,6 +53,11 @@ router.get('/paginated/:pg',  async(req, res) => {
 
 router.get('/realTimeProducts', (req,res)=> {
     res.status(200).render('realTimeProducts')
+})
+
+router.get('/realTimeProducts/paginated/:pg', (req,res)=> {
+    const pg = req.params.pg
+    res.status(200).render('realTimeProducts', {pg})
 })
 
 router.get('/realTimeProducts/:pid?', async (req, res)=> {
@@ -71,7 +72,6 @@ router.get('/realTimeProducts/:pid?', async (req, res)=> {
         res.status(500).render('error', { message: 'Error al cargar los productos' });
     }
 })
-
 
 router.get('/cart', (req, res)=> {
     res.status(200).render('cart')

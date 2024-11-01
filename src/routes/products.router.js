@@ -1,29 +1,17 @@
 import { Router } from "express";
 import { nanoid } from "nanoid";
-import fs from "fs";
 
 import ProductController from "../dao/product.controller.js";
 
-//import productModel from "../dao/models/product.model.js";
-
 const router = Router();
 const controller = new ProductController()
-
-
-let storeProducts = [];
 
 const midd1 = (req, res, next) => {
   console.log("se recibio una solicitud GET");
   next();
 };
 
-router.get("/", midd1, async (req, res) => {
-  const data = await controller.get()
-
-  // const limit = parseInt(req.query.limit) || data.length;
-  // const limitedProducts = data.slice(0, limit);
-  res.status(200).send({ error: null, data});
-});
+//let storeProducts = [];
 
 // async function fetchProducts(filePath) {
 //   try {
@@ -36,33 +24,41 @@ router.get("/", midd1, async (req, res) => {
 
 // fetchProducts("./src/products.json");
 
-router.get("/paginated/:pg?", async (req, res) => {
+router.get("/", midd1, async (req, res) => {
+  const data = await controller.get()
+  res.status(200).send({ error: null, data});
+});
+
+router.get("/products/paginated/:pg?", async (req, res) => {
   const pg = req.params.pg || 1;
   const data = await controller.getPaginated(pg)
   res.status(200).send({ error: null, data});
 });
 
+router.get('/all', async ( req, res)=> {
+  const data = await controller.getAll()
+  res.status(200).send({error: null, data})
+})
 
-router.get("/realTimeProducts/:pid?", async (req, res) => {
-  const productId = req.params.pid;
-  console.log('products:',productId)
-  const filter = { _id: productId };
-  console.log('filter:', filter)
-  console.log('hola')
+// router.get("/realTimeProducts/:pid?", async (req, res) => {
+//   const productId = req.params.pid;
+//   console.log('products:',productId)
+//   const filter = { _id: productId };
+//   console.log('filter:', filter)
+//   console.log('hola')
 
-  try {
-    const product = await controller.getOne(filter);
+//   try {
+//     const product = await controller.getOne(filter);
 
-    if (!product) {
-      return res.status(404).send({ error: "Product not found", data: null });
-    }
-    res.status(200).send({ error: null, data: product });
-  } catch (error) {
-    console.error("Error al buscar el producto:", error);
-    res.status(500).send({ error: "Error al buscar el producto", data: null });
-  }
-});
-
+//     if (!product) {
+//       return res.status(404).send({ error: "Product not found", data: null });
+//     }
+//     res.status(200).send({ error: null, data: product });
+//   } catch (error) {
+//     console.error("Error al buscar el producto:", error);
+//     res.status(500).send({ error: "Error al buscar el producto", data: null });
+//   }
+// });
 
 router.post("/", async (req, res) => {
   const { title, description, code, price, stock, category, thumbnails } =
@@ -95,20 +91,17 @@ router.post("/", async (req, res) => {
     thumbnails: thumbnails || [],
   };
 
-  /////cambiar a mongo a partir de aqui
-  //   storeProducts.push(newProduct);
-  //   await fs.promises.writeFile(
-  //     "./src/products.json",
-  //     JSON.stringify(storeProducts, null, 2)
-  //   );
-
-  const process = await controller.add(newProduct)
-
-  res.status(200).send({ error: null, data: process });
+  try {
+    const process = await controller.add(newProduct);
+    res.status(200).send({ error: null, data: process });
+  } catch (error) {
+    console.error('Error al agregar el producto:', error);
+    res.status(500).send({ error: "Error al agregar el producto", data: [] });
+  }
 });
 
-router.put("/:id", async (req, res) => {
-  const productId = req.params.id;
+router.put("/:pid", async (req, res) => {
+  const productId = req.params.pid;
   const filter = { _id: productId };
   const updated = req.body;
   const options = { new: true };
@@ -130,21 +123,6 @@ router.put("/:id", async (req, res) => {
     res.status(404).send({ error: "No se encuentra el producto", data: [] });
   }
 });
-
-// router.delete("/:id", async (req, res) => {
-//   const id = req.params.id;
-//   const index = storeProducts.findIndex((element) => element.id == id);
-//   if (index !== -1) {
-//     storeProducts.splice(index, 1);
-//     await fs.promises.writeFile(
-//       "./src/products.json",
-//       JSON.stringify(storeProducts, null, 2)
-//     );
-//     res.status(200).send({ error: null, data: "producto borrado" });
-//   } else {
-//     res.status(404).send({ error: "no se encuentra el producto", data: [] });
-//   }
-// });
 
 router.delete("/:pid", async (req, res) => { 
   const productId = req.params.pid; 
