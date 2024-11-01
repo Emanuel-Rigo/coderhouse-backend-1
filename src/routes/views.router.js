@@ -44,7 +44,7 @@ router.get('/products/:pid', async (req, res) => {
     }
 });
 
-router.get('/paginated/:pg',  async(req, res) => {
+router.get('/products/paginated/:pg',  async(req, res) => {
     const pg = req.params.pg;
     const products = await ProController.getPaginated(pg)
     console.log('Límite:', pg);

@@ -29,7 +29,7 @@ router.get("/", midd1, async (req, res) => {
   res.status(200).send({ error: null, data});
 });
 
-router.get("/products/paginated/:pg?", async (req, res) => {
+router.get("/paginated/:pg?", async (req, res) => {
   const pg = req.params.pg || 1;
   const data = await controller.getPaginated(pg)
   res.status(200).send({ error: null, data});
