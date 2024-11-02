@@ -1,25 +1,28 @@
 import mongoose from "mongoose";
-import config from "../../config";
+import mongoosePaginate from 'mongoose-paginate-v2'
 
-//Anulamos comportamiento de renombre por defecto de colleciones
+// Anulamos comportamiento de renombre por defecto de colecciones
 mongoose.pluralize(null);
+import config from "../../config.js";
 
-//coleccion
+// Colección
 const collection = config.CART_COLLECTION;
 
-const schema = new mongoose.Schema({
-  id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: config.CART_COLLECTION,
+const schema = new mongoose.Schema(
+  {
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: config.CART_COLLECTION,
+    },
+    products: {
+      type: [{ _id: mongoose.Schema.Types.ObjectId, quantity: Number }]
+    },
   },
-  products: {
-    type: [{ _id: mongoose.Schema.Types.ObjectId, qty: Number }],
-    required: true,
-  },
-});
+  { timestamps: true }
+);
+schema.plugin(mongoosePaginate);
 
-//generamos modelo
+// Generamos modelo
 const cartModel = mongoose.model(collection, schema);
 
 export default cartModel;

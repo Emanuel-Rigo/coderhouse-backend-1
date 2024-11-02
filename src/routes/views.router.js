@@ -34,8 +34,10 @@ router.get('/products', async (req, res) => {
 
 router.get('/products/:pid', async (req, res) => {
     const pid = req.params.pid
+
     try {
         console.log(pid)
+       
         const product = await ProController.getOne({_id:pid});
         res.render('product', {product});
     } catch (error) {
@@ -73,8 +75,20 @@ router.get('/realTimeProducts/:pid?', async (req, res)=> {
     }
 })
 
-router.get('/cart', (req, res)=> {
-    res.status(200).render('cart')
+router.get('/carts', (req, res)=> {
+    res.status(200).render('carts')
 })
+
+router.get('/:cid/products', async (req, res) => {
+    const cid = req.params.cid;
+
+    try {
+        const products = await ProController.get();
+        res.render('home', { products, cid });
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).render('error', { message: 'Error al cargar los productos' });
+    }
+});
 
 export default router;
