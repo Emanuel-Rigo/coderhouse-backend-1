@@ -11,9 +11,30 @@ class ProductController {
     }
   };
 
-  get = async () => {
+  get = async (options) => {
     try {
-      return await productModel.paginate({}, { limit: 10, lean: true });
+      const { limit = 10, page = 1, sort, filter } = options;
+
+      // Construir el filtro
+      
+      if (filter) {
+        //filter.category = { $regex: query, $options: 'i' }; // Búsqueda insensible a mayúsculas en la categoría
+        console.log(filter)
+      }
+
+      // Configurar opciones de ordenamiento
+      let sortOptions;
+      if (sort) {
+        sortOptions = { price: sort === 'asc' ? 1 : -1 }; // Ordenar por precio
+      }
+
+      // Realizar la paginación
+      return await productModel.paginate(filter, {
+        limit: parseInt(limit, 10),
+        page: parseInt(page, 10),
+        sort: sortOptions,
+        lean: true
+      });
     } catch (err) {
       return err.message;
     }
@@ -32,7 +53,10 @@ class ProductController {
   getPaginated = async (pg) => {
     try {
       const page = pg || 1;
-      return await productModel.paginate({}, { limit: 10, page: page, lean: true });
+      return await productModel.paginate(
+        {},
+        { limit: 10, page: page, lean: true }
+      );
     } catch (err) {
       return err.message;
     }
