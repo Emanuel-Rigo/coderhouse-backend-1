@@ -2,6 +2,9 @@ import { Router } from "express";
 //import { promises as fs } from 'fs'
 
 import ProductController from "../dao/product.controller.js";
+import CartController from "../dao/cart.controller.js";
+
+const CaController = new CartController()
 const ProController = new ProductController()
 
 const router = Router();
@@ -55,6 +58,21 @@ router.get('/products/paginated/:pg',  async(req, res) => {
     res.status(200).render('home', { products });
 });
 
+router.get('/:cid/products', async (req, res) => {
+    const cid = req.params.cid;
+
+    try {
+        const response = await fetch('http://localhost:8080/api/products')
+        const products = await response.json();
+        console.log('products:',products)
+        res.render('home', {products: products.data, cid});
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).render('error', { message: 'Error al cargar los productos' });
+    }
+
+});
+
 router.get('/realTimeProducts', (req,res)=> {
     res.status(200).render('realTimeProducts')
 })
@@ -77,20 +95,28 @@ router.get('/realTimeProducts/:pid?', async (req, res)=> {
     }
 })
 
-router.get('/carts', (req, res)=> {
-    res.status(200).render('carts')
-})
-
-router.get('/:cid/products', async (req, res) => {
-    const cid = req.params.cid;
+router.get('/carts', async (req, res)=> {
 
     try {
-        const products = await ProController.get();
-        res.render('home', { products, cid });
+        const response = await fetch('http://localhost:8080/api/carts')
+        const carts = await response.json();
+      //  console.log('carts:',carts)
+        res.render('carts', {carts: carts.data});
     } catch (error) {
         console.error('Error al obtener productos:', error);
         res.status(500).render('error', { message: 'Error al cargar los productos' });
     }
-});
+
+    })
+
+router.get('/carts/:cid', async(req, res)=> {
+    const cid = req.params.cid
+    const cart = await CaController.getOne({_id: cid})
+    console.log(cid)
+    res.status(200).render('cart', {cart})
+})
+
+
+
 
 export default router;

@@ -1,1 +1,27 @@
-<h2>carts</h2>
+<h1 class="text-2xl font-bold mb-4">Carritos Disponibles</h1>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {{log carts}}
+    {{#each carts}}
+        <div class="bg-white border border-gray-300 rounded-lg shadow-md p-4">
+            <h2 class="text-lg font-semibold">Carrito ID: {{this._id}}</h2>
+            <p class="text-gray-700">Total: ${{this.total}}</p>
+            <p class="text-gray-700">Items:</p>
+            <ul class="list-disc list-inside">
+                {{#each this.items}}
+                    <li class="text-gray-600">{{this.name}} - Cantidad: {{this.quantity}}</li>
+                {{/each}}
+            </ul>
+            <div class="mt-4 flex space-x-2">
+                <a href="/views/{{this._id}}/products" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200">
+                    Asignar Carrito
+                </a>
+                <a href="/views/carts/{{this._id}}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200">
+                    Ver Carrito
+                </a>
+            </div>
+        </div>
+    {{else}}
+        <p class="text-red-500">No hay carritos disponibles.</p>
+    {{/each}}
+</div>

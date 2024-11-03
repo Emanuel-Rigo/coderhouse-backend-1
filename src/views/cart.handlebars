@@ -1,1 +1,33 @@
-<h1>cart</h1>
+{{log cart}}
+
+<h1 class="text-2xl font-bold mb-4">Carrito ID: {{cart._id}}</h1>
+
+<div class="bg-white border border-gray-300 rounded-lg shadow-md p-4">
+    <p class="text-gray-700">Items:</p>
+    <ul class="list-disc list-inside">
+        {{#each cart.products}}
+            <li class="flex justify-between items-center text-gray-600 p-2 border-b border-gray-200">
+                <span>
+                    ID: {{this._id}} - {{lookup ../products this._id}} - Cantidad: {{this.quantity}}
+                </span>
+                <div class="flex space-x-2">
+                    <form action="/cart/{{../cart._id}}/remove/{{this._id}}" method="POST">
+                        <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition duration-200">
+                            Eliminar
+                        </button>
+                    </form>
+                    <form action="/cart/{{../cart._id}}/increase/{{this._id}}" method="POST">
+                        <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition duration-200">
+                            Aumentar Cantidad
+                        </button>
+                    </form>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+{{#if cart.products.length}}
+{{else}}
+    <p class="text-red-500">No hay productos en el carrito.</p>
+{{/if}}
