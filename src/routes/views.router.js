@@ -24,8 +24,10 @@ const router = Router();
 
 router.get('/products', async (req, res) => {
     try {
-        const products = await ProController.get();
-        res.render('home', {products});
+        const response = await fetch('http://localhost:8080/api/products')
+        const products = await response.json();
+        console.log('products:',products)
+        res.render('home', {products: products.data});
     } catch (error) {
         console.error('Error al obtener productos:', error);
         res.status(500).render('error', { message: 'Error al cargar los productos' });

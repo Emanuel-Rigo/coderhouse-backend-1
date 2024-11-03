@@ -60,7 +60,8 @@ router.get("/", async (req, res) => {
     // Configurar opciones de ordenamiento
     let sortOptions;
     if (sort) {
-      sortOptions = { price: sort === "asc" ? 1 : -1 }; // Ordenar por precio
+      sortOptions = sort; 
+      console.log(sortOptions)// Ordenar por precio
     }
 
     // Lógica para obtener productos

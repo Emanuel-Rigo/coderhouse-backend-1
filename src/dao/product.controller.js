@@ -15,20 +15,26 @@ class ProductController {
     try {
       const { limit = 10, page = 1, sort, filter } = options;
 
-      // Construir el filtro
-      
-      if (filter) {
-        //filter.category = { $regex: query, $options: 'i' }; // Búsqueda insensible a mayúsculas en la categoría
-        console.log(filter)
-      }
-
-      // Configurar opciones de ordenamiento
       let sortOptions;
       if (sort) {
-        sortOptions = { price: sort === 'asc' ? 1 : -1 }; // Ordenar por precio
+        if (sort === 'asc') {
+          sortOptions = { price: 1 };
+        } else if (sort === 'desc') {
+          sortOptions = { price: -1 };
+        } else {
+          console.error('Invalid sort option'); // Manejo de errores para valores no válidos
+        }
       }
 
-      // Realizar la paginación
+      if (!filter || Object.keys(filter).length === 0) {
+        return await productModel.paginate({}, {
+          limit: 10,
+          page: parseInt(page, 10),
+          sort: sortOptions,
+          lean: true
+        });
+      }
+
       return await productModel.paginate(filter, {
         limit: parseInt(limit, 10),
         page: parseInt(page, 10),
