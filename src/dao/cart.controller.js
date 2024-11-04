@@ -13,6 +13,20 @@ class CartController {
     }
   };
 
+  findOne = async (data) => {
+    try {
+        console.log("data:", data);
+        const cart = await cartModel.findOne(data)
+                       .lean();
+        
+        console.log("Cart with populated products:", cart);
+        return cart;
+    } catch (err) {
+        console.error("Error al buscar el carrito:", err);
+        return null;
+    }
+};
+
   getOne = async (data) => {
     try {
         console.log("data:", data);

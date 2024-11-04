@@ -5,7 +5,6 @@ import CartController from "../dao/cart.controller.js";
 
 const router = Router();
 const controller = new CartController();
-let storeCarts = [];
 
 async function fetchCarts(filePath) {
   try {
@@ -79,7 +78,7 @@ router.post("/", async (req, res) => {
 
 router.post("/:cid/products/:pid", async (req, res) => {
     const { cid, pid } = req.params;
-    const cart = await controller.getOne({ _id: cid });
+    const cart = await controller.findOne({ _id: cid });
     console.log('cart:', cart);
     
     if (!cart) {

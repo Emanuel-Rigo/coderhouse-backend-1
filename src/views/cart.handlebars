@@ -8,7 +8,7 @@
         {{#each cart.products}}
             <li class="flex justify-between items-center text-gray-600 p-2 border-b border-gray-200">
                 <span>
-                    Título: {{this.title}} - Precio: ${{this.price}} - Categoría: {{this.category}} - Cantidad: {{this.quantity}}
+                    Título: {{this._id.title}} - Precio: ${{this.price}} - Categoría: {{this.category}} - Cantidad: {{this.quantity}}
                 </span>
                 <div class="flex space-x-2">
                     <form action="/cart/{{../cart._id}}/remove/{{this.productId}}" method="POST">
