@@ -59,7 +59,13 @@
                 }
             }
 
-            window.location.href = `/views/products?${urlParams.toString()}`;
+            const pathParts = window.location.pathname.split('/');
+            const cid = pathParts[2];
+            if (cid) {
+                urlParams.set('cid', cid);
+            }
+
+            window.location.href = `/views/${cid}/products?${urlParams.toString()}`;
         }
 
         function filterByAvailability(available) {
