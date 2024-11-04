@@ -13,11 +13,10 @@ class CartController {
     }
   };
 
-  findOne = async (data) => {
+  fOne= async (data) => {
     try {
         console.log("data:", data);
-        const cart = await cartModel.findOne(data)
-                       .lean();
+        const cart = await cartModel.findOne(data).lean();
         
         console.log("Cart with populated products:", cart);
         return cart;

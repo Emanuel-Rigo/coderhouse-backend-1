@@ -18,7 +18,7 @@
 
                 if (response.ok) {
                     const newCart = await response.json();
-                    console.log('newcart',newCart)
+                    console.log('newcart', newCart);
                     alert(`Carrito creado con ID: ${newCart.data._id}`);
                 } else {
                     alert('Error al crear el carrito');
@@ -58,14 +58,17 @@
                 if (limit == "") {
                     urlParams.delete('limit'); // Quitar filtro
                 } else {
-                    urlParams.set('limit', limit); // Agregar o actualizar filtro
+                    urlParams.set('limit', limit); 
                 }
             }
 
-            
-
-            // Redirigir a la página de productos con las query parameters
             window.location.href = `/views/products?${urlParams.toString()}`;
+        }
+
+        function filterByAvailability(available) {
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('available', available); // Establecer el estado de disponibilidad
+            window.location.href = `/views/products?${urlParams.toString()}`; // Redirigir con el nuevo parámetro
         }
     </script>
 </head>
@@ -75,10 +78,9 @@
             <h1 class="text-2xl font-bold">Sistema de Gestión de Productos</h1>
             <div class="flex items-center">
                 <a href="/views/products" class="px-4 hover:bg-blue-500 rounded">Productos</a>
-                <a href="/views/realTimeProducts" class="px-4 hover:bg-blue-500 rounded">Real Time Products</a>
+                <a href="/views/realTimeProducts" class="px-4 hover:bg-blue-500 rounded">RealTime</a>
                 <a href="/views/carts" class="px-4 hover:bg-blue-500 rounded">Carts</a>
                 <a href="/api/products" class="px-4 hover:bg-blue-500 rounded">API</a>
-                <button onclick="createCart()" class="px-4 bg-green-500 hover:bg-green-600 rounded">Crear Carrito</button>
 
                 <!-- Desplegables para filtros -->
                 <div class="relative inline-block text-left ml-4">
@@ -112,6 +114,15 @@
                         <option value="">Quitar Filtro</option> <!-- Opción para quitar el filtro -->
                     </select>
                 </div>
+
+                <!-- Contenedor para los botones de disponibilidad -->
+                <div class="flex flex-col ml-4">
+                    <button onclick="filterByAvailability(true)" class="mb-1 px-2 py-1 bg-yellow-500 hover:bg-yellow-600 rounded text-sm">Disponibles</button>
+                    <button onclick="filterByAvailability(false)" class="px-2 py-1 bg-red-500 hover:bg-red-600 rounded text-sm">No Disponibles</button>
+                </div>
+
+                <!-- Botón Crear Carrito alineado al final -->
+                <button onclick="createCart()" class="ml-4 px-2 py-1 bg-green-500 hover:bg-green-600 rounded text-sm h-full">Crear Carrito</button>
             </div>
         </div>
     </nav>

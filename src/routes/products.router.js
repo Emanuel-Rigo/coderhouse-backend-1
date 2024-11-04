@@ -32,7 +32,7 @@ const midd1 = (req, res, next) => {
 router.get("/", async (req, res) => {
   try {
     // Desestructurar los parámetros de consulta con valores por defecto
-    const { limit = 10, page = 1, sort, query } = req.query;
+    const { limit = 10, page = 1, sort, query, available } = req.query;
 
     // Convertir los parámetros a números
     const limitNumber = parseInt(limit, 10);
@@ -60,11 +60,21 @@ router.get("/", async (req, res) => {
       console.log("filter::", filter);
     }
 
+    // Filtrar por disponibilidad
+    if (available) {
+      if (available === 'true') {
+        filter.status = true; // Solo productos disponibles
+      } else if (available === 'false') {
+        filter.status = false; // Solo productos no disponibles
+      }
+      console.log("filter con disponibilidad:", filter);
+    }
+
     // Configurar opciones de ordenamiento
     let sortOptions;
     if (sort) {
       sortOptions = sort; // Asignar el valor de sort
-      console.log('sort:',sortOptions); // Ordenar por precio
+      console.log('sort:', sortOptions); // Ordenar por precio
     }
 
     // Lógica para obtener productos
