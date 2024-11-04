@@ -1,5 +1,4 @@
 import { Router } from "express";
-//import { promises as fs } from 'fs'
 
 import ProductController from "../dao/product.controller.js";
 import CartController from "../dao/cart.controller.js";
@@ -85,19 +84,17 @@ router.get('/:cid/products', async (req, res) => {
     const cid = req.params.cid;
 
     try {
-        // Construir la URL base
+
         let url = 'http://localhost:8080/api/products';
 
-        // Verificar si hay parámetros de consulta
         const queryParams = new URLSearchParams(req.query);
        
         if (queryParams.toString()) {
-            url += `?${queryParams.toString()}`; // Agregar los parámetros de consulta a la URL
+            url += `?${queryParams.toString()}`; 
         }
         console.log(  'url:',url )
         const response = await fetch(url);
         const products = await response.json();
-       // console.log('products:', products.data.docs);
         res.render('home', { products: products.data, cid });
     } catch (error) {
         console.error('Error al obtener productos:', error);

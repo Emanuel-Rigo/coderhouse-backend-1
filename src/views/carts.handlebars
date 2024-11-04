@@ -5,11 +5,11 @@
     {{#each carts}}
         <div class="bg-white border border-gray-300 rounded-lg shadow-md p-4">
             <h2 class="text-lg font-semibold">Carrito ID: {{this._id}}</h2>
-            <p class="text-gray-700">Total: ${{this.total}}</p>
-            <p class="text-gray-700">Items:</p>
             <ul class="list-disc list-inside">
-                {{#each this.items}}
-                    <li class="text-gray-600">{{this.name}} - Cantidad: {{this.quantity}}</li>
+                {{#each this.products}}
+                    <li class="text-gray-600">
+                        Título: {{this._id.title}} - Precio: ${{this._id.price}} - Cantidad: {{this.quantity}}
+                    </li>
                 {{/each}}
             </ul>
             <div class="mt-4 flex space-x-2">
@@ -19,9 +19,34 @@
                 <a href="/views/carts/{{this._id}}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200">
                     Ver Carrito
                 </a>
+                <button onclick="emptyCart('{{this._id}}')" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200">
+                    Vaciar Carrito
+                </button>
             </div>
         </div>
     {{else}}
         <p class="text-red-500">No hay carritos disponibles.</p>
     {{/each}}
 </div>
+
+<script>
+    async function emptyCart(cid) {
+        if (confirm('¿Estás seguro de que deseas vaciar el carrito?')) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/carts/${cid}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    alert('Carrito vaciado con éxito');
+                    location.reload();
+                } else {
+                    alert('Error al vaciar el carrito');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al vaciar el carrito');
+            }
+        }
+    }
+</script>

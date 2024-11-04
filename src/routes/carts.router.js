@@ -110,4 +110,28 @@ router.delete('/:cid/products/:pid', async (req, res) => {
     }
 });
 
+router.delete('/:cid', async (req, res) => {
+    const { cid } = req.params;
+
+    try {
+        const cart = await controller.fOne({ _id: cid });
+        console.log('cart:', cart);
+        
+        if (!cart) {
+            return res.status(404).send({ error: 'Carrito no encontrado' });
+        }
+
+        const updatedCart = await controller.update(
+            { _id: cid }, 
+            { products: [] }, 
+            { new: true } 
+        );
+
+        res.status(200).send({ error: null, data: updatedCart });
+    } catch (err) {
+        console.error("Error al eliminar todos los productos del carrito:", err);
+        res.status(500).send({ error: "Error interno del servidor" });
+    }
+});
+
 export default router;
