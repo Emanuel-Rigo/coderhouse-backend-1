@@ -35,30 +35,27 @@
             const price = document.getElementById('price').value;
             const limit = document.getElementById('limit').value;
 
-            // Manejo de la query
             if (query) {
                 if (query === "") {
-                    urlParams.delete('query'); // Quitar filtro
+                    urlParams.delete('query');
                 } else {
-                    urlParams.set('query', query); // Agregar o actualizar filtro
+                    urlParams.set('query', query);
                 }
             }
 
-            // Manejo del precio
             if (price) {
                 if (price === "") {
-                    urlParams.delete('sort'); // Quitar filtro
+                    urlParams.delete('sort');
                 } else {
-                    urlParams.set('sort', price); // Agregar o actualizar filtro
+                    urlParams.set('sort', price);
                 }
             }
 
-            // Manejo del límite
             if (limit) {
                 if (limit == "") {
-                    urlParams.delete('limit'); // Quitar filtro
+                    urlParams.delete('limit');
                 } else {
-                    urlParams.set('limit', limit); 
+                    urlParams.set('limit', limit);
                 }
             }
 
@@ -67,8 +64,8 @@
 
         function filterByAvailability(available) {
             const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('available', available); // Establecer el estado de disponibilidad
-            window.location.href = `/views/products?${urlParams.toString()}`; // Redirigir con el nuevo parámetro
+            urlParams.set('available', available);
+            window.location.href = `/views/products?${urlParams.toString()}`;
         }
     </script>
 </head>
@@ -82,7 +79,6 @@
                 <a href="/views/carts" class="px-4 hover:bg-blue-500 rounded">Carts</a>
                 <a href="/api/products" class="px-4 hover:bg-blue-500 rounded">API</a>
 
-                <!-- Desplegables para filtros -->
                 <div class="relative inline-block text-left ml-4">
                     <select id="query" class="block w-full px-4 py-2 text-sm text-gray-700 rounded-md" onchange="filterProducts()">
                         <option value="">Categoria</option>
@@ -91,7 +87,7 @@
                         <option value="oficina">Oficina</option>
                         <option value="accesorios">Accesorios</option>
                         <option value="deportes">Deportes</option>
-                        <option value="">Quitar Filtro</option> <!-- Opción para quitar el filtro -->
+                        <option value="">Quitar Filtro</option>
                     </select>
                 </div>
 
@@ -100,7 +96,7 @@
                         <option value="">Ordenar</option>
                         <option value="asc">Precio Ascendente</option>
                         <option value="desc">Precio Descendente</option>
-                        <option value="">Quitar Filtro</option> <!-- Opción para quitar el filtro -->
+                        <option value="">Quitar Filtro</option>
                     </select>
                 </div>
 
@@ -111,17 +107,15 @@
                         <option value="10">10</option>
                         <option value="20">20</option>
                         <option value="50">50</option>
-                        <option value="">Quitar Filtro</option> <!-- Opción para quitar el filtro -->
+                        <option value="">Quitar Filtro</option>
                     </select>
                 </div>
 
-                <!-- Contenedor para los botones de disponibilidad -->
                 <div class="flex flex-col ml-4">
                     <button onclick="filterByAvailability(true)" class="mb-1 px-2 py-1 bg-yellow-500 hover:bg-yellow-600 rounded text-sm">Disponibles</button>
                     <button onclick="filterByAvailability(false)" class="px-2 py-1 bg-red-500 hover:bg-red-600 rounded text-sm">No Disponibles</button>
                 </div>
 
-                <!-- Botón Crear Carrito alineado al final -->
                 <button onclick="createCart()" class="ml-4 px-2 py-1 bg-green-500 hover:bg-green-600 rounded text-sm h-full">Crear Carrito</button>
             </div>
         </div>

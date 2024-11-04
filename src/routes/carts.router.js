@@ -67,11 +67,9 @@ router.post("/:cid/products/:pid", async (req, res) => {
     if (productInCart) {
         productInCart.quantity += 1;
     } else {
-        console.log('pid""""', pid);
         cart.products.push({ _id: pid, quantity: 1 });
     }
     
-    console.log('cart2:', cart);
     
     const cartToUpdate = {
         _id: cart._id.toString(),
@@ -89,8 +87,6 @@ router.delete('/:cid/products/:pid', async (req, res) => {
     try {
    
         const cart = await controller.fOne({ _id: cid });
-        console.log('cart:', cart);
-        console.log('pid:', pid);
         if (!cart) {
             return res.status(404).send({ error: 'Carrito no encontrado' });
         }

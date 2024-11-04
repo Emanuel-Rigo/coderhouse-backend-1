@@ -33,12 +33,11 @@ router.get('/products', async (req, res) => {
         const queryParams = new URLSearchParams(req.query);
        
         if (queryParams.toString()) {
-            url += `?${queryParams.toString()}`; // Agregar los parámetros de consulta a la URL
+            url += `?${queryParams.toString()}`; 
         }
         console.log(  'url:',url )
         const response = await fetch(url);
         const products = await response.json();
-       // console.log('products:', products.data.docs);
         res.render('home', { products: products.data });
     } catch (error) {
         console.error('Error al obtener productos:', error);
@@ -63,8 +62,7 @@ router.get('/:cid/products/:pid', async (req, res) => {
     const pid = req.params.pid
     const cid = req.params.cid
     try {
-        console.log('pid:',pid)
-        console.log('cid:', cid)
+
         const product = await ProController.getOne({_id:pid});
         res.render('product', {product, cid});
     } catch (error) {
@@ -76,7 +74,6 @@ router.get('/:cid/products/:pid', async (req, res) => {
 router.get('/products/paginated/:pg',  async(req, res) => {
     const pg = req.params.pg;
     const products = await ProController.getPaginated(pg)
-    console.log('Límite:', pg);
     res.status(200).render('home', { products });
 });
 
@@ -92,7 +89,6 @@ router.get('/:cid/products', async (req, res) => {
         if (queryParams.toString()) {
             url += `?${queryParams.toString()}`; 
         }
-        console.log(  'url:',url )
         const response = await fetch(url);
         const products = await response.json();
         res.render('home', { products: products.data, cid });
@@ -111,18 +107,7 @@ router.get('/realTimeProducts/paginated/:pg', (req,res)=> {
     res.status(200).render('realTimeProducts', {pg})
 })
 
-// router.get('/realTimeProducts/:pid?', async (req, res)=> {
-//     const pid = req.params.pid;
-//     try {
-//         const product = await ProController.getOne({_id:pid});
-//         console.log('pid:',pid)
-//         console.log(product)
-//         res.render('product', { product });
-//     } catch (error) {
-//         console.error('Error al obtener productos:', error);
-//         res.status(500).render('error', { message: 'Error al cargar los productos' });
-//     }
-// })
+
 
 router.get('/carts', async (req, res)=> {
 
@@ -141,7 +126,6 @@ router.get('/carts', async (req, res)=> {
 router.get('/carts/:cid', async(req, res)=> {
     const cid = req.params.cid
     const cart = await CaController.getOne({_id: cid})
-    console.log('cid:',cid)
     res.status(200).render('cart', {cart})
 })
 
