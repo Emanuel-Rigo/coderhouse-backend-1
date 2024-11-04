@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { nanoid } from "nanoid";
 import fs from "fs";
 
 import CartController from "../dao/cart.controller.js";

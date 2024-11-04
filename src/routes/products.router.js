@@ -31,16 +31,21 @@ const midd1 = (req, res, next) => {
 
 router.get("/", async (req, res) => {
   try {
+    // Desestructurar los parámetros de consulta con valores por defecto
     const { limit = 10, page = 1, sort, query } = req.query;
 
+    // Convertir los parámetros a números
     const limitNumber = parseInt(limit, 10);
     const pageNumber = parseInt(page, 10);
 
+    // Validar el parámetro 'limit'
     if (isNaN(limitNumber) || limitNumber <= 0) {
       return res
         .status(400)
         .send({ error: "El parámetro 'limit' debe ser un número positivo." });
     }
+
+    // Validar el parámetro 'page'
     if (isNaN(pageNumber) || pageNumber <= 0) {
       return res
         .status(400)
@@ -51,22 +56,20 @@ router.get("/", async (req, res) => {
     const filter = {};
     if (query) {
       console.log("si query", query);
-      filter.category = query;
+      filter.category = query; // Asignar el valor de query al filtro
       console.log("filter::", filter);
-
-      // Busca exactamente la categoría que coincide con el valor de query
     }
 
     // Configurar opciones de ordenamiento
     let sortOptions;
     if (sort) {
-      sortOptions = sort; 
-      console.log(sortOptions)// Ordenar por precio
+      sortOptions = sort; // Asignar el valor de sort
+      console.log('sort:',sortOptions); // Ordenar por precio
     }
 
     // Lógica para obtener productos
     const options = {
-      limit: limitNumber,
+      limit: limitNumber, // Usar el limitNumber calculado
       page: pageNumber,
       sort: sortOptions,
       filter: filter, // Pasar el filtro al controlador

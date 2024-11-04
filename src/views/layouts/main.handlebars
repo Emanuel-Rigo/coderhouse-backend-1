@@ -18,7 +18,7 @@
 
                 if (response.ok) {
                     const newCart = await response.json();
-                    console.log(newCart)
+                    console.log('newcart',newCart)
                     alert(`Carrito creado con ID: ${newCart.data._id}`);
                 } else {
                     alert('Error al crear el carrito');
@@ -28,18 +28,90 @@
                 alert('Error al crear el carrito');
             }
         }
+
+        function filterProducts() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = document.getElementById('query').value;
+            const price = document.getElementById('price').value;
+            const limit = document.getElementById('limit').value;
+
+            // Manejo de la query
+            if (query) {
+                if (query === "") {
+                    urlParams.delete('query'); // Quitar filtro
+                } else {
+                    urlParams.set('query', query); // Agregar o actualizar filtro
+                }
+            }
+
+            // Manejo del precio
+            if (price) {
+                if (price === "") {
+                    urlParams.delete('sort'); // Quitar filtro
+                } else {
+                    urlParams.set('sort', price); // Agregar o actualizar filtro
+                }
+            }
+
+            // Manejo del límite
+            if (limit) {
+                if (limit == "") {
+                    urlParams.delete('limit'); // Quitar filtro
+                } else {
+                    urlParams.set('limit', limit); // Agregar o actualizar filtro
+                }
+            }
+
+            
+
+            // Redirigir a la página de productos con las query parameters
+            window.location.href = `/views/products?${urlParams.toString()}`;
+        }
     </script>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <nav class="bg-blue-600 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-bold">Sistema de Gestión de Productos</h1>
-            <div>
+            <div class="flex items-center">
                 <a href="/views/products" class="px-4 hover:bg-blue-500 rounded">Productos</a>
                 <a href="/views/realTimeProducts" class="px-4 hover:bg-blue-500 rounded">Real Time Products</a>
                 <a href="/views/carts" class="px-4 hover:bg-blue-500 rounded">Carts</a>
                 <a href="/api/products" class="px-4 hover:bg-blue-500 rounded">API</a>
                 <button onclick="createCart()" class="px-4 bg-green-500 hover:bg-green-600 rounded">Crear Carrito</button>
+
+                <!-- Desplegables para filtros -->
+                <div class="relative inline-block text-left ml-4">
+                    <select id="query" class="block w-full px-4 py-2 text-sm text-gray-700 rounded-md" onchange="filterProducts()">
+                        <option value="">Categoria</option>
+                        <option value="electrónica">Electrónica</option>
+                        <option value="muebles">Muebles</option>
+                        <option value="oficina">Oficina</option>
+                        <option value="accesorios">Accesorios</option>
+                        <option value="deportes">Deportes</option>
+                        <option value="">Quitar Filtro</option> <!-- Opción para quitar el filtro -->
+                    </select>
+                </div>
+
+                <div class="relative inline-block text-left ml-4">
+                    <select id="price" class="block w-full px-4 py-2 text-sm text-gray-700 rounded-md" onchange="filterProducts()">
+                        <option value="">Ordenar</option>
+                        <option value="asc">Precio Ascendente</option>
+                        <option value="desc">Precio Descendente</option>
+                        <option value="">Quitar Filtro</option> <!-- Opción para quitar el filtro -->
+                    </select>
+                </div>
+
+                <div class="relative inline-block text-left ml-4">
+                    <select id="limit" class="block w-full px-4 py-2 text-sm text-gray-700 rounded-md" onchange="filterProducts()">
+                        <option value="">Limite</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="">Quitar Filtro</option> <!-- Opción para quitar el filtro -->
+                    </select>
+                </div>
             </div>
         </div>
     </nav>

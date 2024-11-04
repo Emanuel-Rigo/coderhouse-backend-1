@@ -1,4 +1,5 @@
 import cartModel from "./models/cart.model.js";
+import productModel from "./models/product.model.js";
 
 
 class CartController {
@@ -14,24 +15,28 @@ class CartController {
 
   getOne = async (data) => {
     try {
-      console.log("data:", data);
-      return await cartModel.findOne(data).lean();
+        console.log("data:", data);
+        const cart = await cartModel.findOne(data)
+            .populate('products._id')
+            .lean();
+        
+        console.log("Cart with populated products:", cart);
+        return cart;
     } catch (err) {
-      console.error("Error al buscar el carrito:", err);
-      return null;
+        console.error("Error al buscar el carrito:", err);
+        return null;
     }
-  };
+};
 
   addProduct = async (data) => {
     try {
       console.log(data);
       
-      // Define el filtro y el objeto de actualización
       const filter = { _id: data._id };
       const update = {
         $set: {
-          products: data.products, // Actualiza la lista de productos
-          updatedAt: new Date() // Actualiza la fecha de modificación
+          products: data.products, 
+          updatedAt: new Date() 
         }
       };
 

@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
-import mongoosePaginate from 'mongoose-paginate-v2'
+import mongoosePaginate from 'mongoose-paginate-v2';
+import config from "../../config.js";
 
-//Anulamos comportamiento de renombre por defecto de colleciones
+// Anulamos comportamiento de renombre por defecto de colecciones
 mongoose.pluralize(null);
 
-//coleccion
-const collection = "products";
+// Colección
+const collection = config.PRODUCTS_COLLECTION;
 
 const schema = new mongoose.Schema(
   {
@@ -15,14 +16,14 @@ const schema = new mongoose.Schema(
     price: { type: Number, required: true },
     status: { type: Boolean, default: true },
     stock: { type: Number, required: true },
-    category: { type: String, required: true },
+    category: { type: String, required: true, index: true },
     thumbnails: { type: [String], default: [] },
   },
   { timestamps: true }
 );
-schema.plugin(mongoosePaginate)
+schema.plugin(mongoosePaginate);
 
-//generamos modelo
+// Generamos modelo
 const productModel = mongoose.model(collection, schema);
 
 export default productModel;

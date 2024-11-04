@@ -36,7 +36,7 @@ const socketServer = new Server(httpServer);
 socketServer.on("connection", (socket) => {
   socket.on("update_ok", (data) => {
     console.log("update");
-    console.log(data);
+    console.log('data:',data);
     socketServer.emit("new_data", data);
   });
 });
