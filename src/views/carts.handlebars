@@ -33,7 +33,7 @@
     async function emptyCart(cid) {
         if (confirm('¿Estás seguro de que deseas vaciar el carrito?')) {
             try {
-                const response = await fetch(`http://localhost:8080/api/carts/${cid}`, {
+                const response = await fetch(`/api/carts/${cid}`, {
                     method: 'DELETE',
                 });
 
