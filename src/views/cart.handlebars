@@ -26,9 +26,9 @@
 {{/if}}
 
 <script>
-    async function deleteProduct(_id: cid, pid) {
+    async function deleteProduct(cid, pid) {
         try {
-            const response = await fetch(`/carts/${cid}/products/${pid}`, {
+            const response = await fetch(`http://localhost:8080/api/carts/${cid}/products/${pid}`, {
                 method: 'DELETE',
             });
 
@@ -36,7 +36,7 @@
                 alert('Producto eliminado con éxito');
                 location.reload();
             } else {
-                alert('Error al eliminar el producto');
+                alert('Error al eliminar el producto2');
             }
         } catch (error) {
             console.error('Error:', error);
