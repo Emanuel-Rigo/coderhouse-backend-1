@@ -22,7 +22,7 @@ class ProductController {
         } else if (sort === 'desc') {
           sortOptions = { price: -1 };
         } else {
-          console.error('Invalid sort option'); // Manejo de errores para valores no válidos
+          console.error('Invalid sort option'); 
         }
       }
 
