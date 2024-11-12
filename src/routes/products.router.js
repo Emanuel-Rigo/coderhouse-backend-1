@@ -31,61 +31,60 @@ const midd1 = (req, res, next) => {
 
 router.get("/", async (req, res) => {
   try {
-    // Desestructurar los parámetros de consulta con valores por defecto
+
     const { limit = 10, page = 1, sort, query, available } = req.query;
 
-    // Convertir los parámetros a números
+
     const limitNumber = parseInt(limit, 10);
     const pageNumber = parseInt(page, 10);
 
-    // Validar el parámetro 'limit'
+   
     if (isNaN(limitNumber) || limitNumber <= 0) {
       return res
         .status(400)
         .send({ error: "El parámetro 'limit' debe ser un número positivo." });
     }
 
-    // Validar el parámetro 'page'
+
     if (isNaN(pageNumber) || pageNumber <= 0) {
       return res
         .status(400)
         .send({ error: "El parámetro 'page' debe ser un número positivo." });
     }
 
-    // Construir el objeto de búsqueda
+
     const filter = {};
     if (query) {
       console.log("si query", query);
-      filter.category = query; // Asignar el valor de query al filtro
+      filter.category = query; 
       console.log("filter::", filter);
     }
 
-    // Filtrar por disponibilidad
+
     if (available) {
       if (available === 'true') {
-        filter.status = true; // Solo productos disponibles
+        filter.status = true; 
       } else if (available === 'false') {
-        filter.status = false; // Solo productos no disponibles
+        filter.status = false; 
       }
       console.log("filter con disponibilidad:", filter);
     }
 
-    // Configurar opciones de ordenamiento
     let sortOptions;
     if (sort) {
-      sortOptions = sort; // Asignar el valor de sort
-      console.log('sort:', sortOptions); // Ordenar por precio
+      sortOptions = sort; 
+      console.log('sort:', sortOptions); 
     }
 
-    // Lógica para obtener productos
+  
     const options = {
-      limit: limitNumber, // Usar el limitNumber calculado
+      limit: limitNumber, 
       page: pageNumber,
       sort: sortOptions,
-      filter: filter, // Pasar el filtro al controlador
+      filter: filter, 
     };
 
-    const data = await controller.get(options); // Asegúrate de que tu controlador maneje estas opciones
+    const data = await controller.get(options); 
 
     res.status(200).send({ error: null, data });
   } catch (err) {
