@@ -54,9 +54,9 @@ class CartController {
       };
 
       // Realiza la actualización
-      return await cartModel.findOneAndUpdate(filter, update, { new: true }).lean(); // Devuelve el carrito actualizado
+      return await cartModel.findOneAndUpdate(filter, update, { new: true }).lean();
     } catch (err) {
-      console.error("Error al actualizar el carrito", err); // Manejo de errores
+      console.error("Error al actualizar el carrito", err);
     }
   };
 
